@@ -297,52 +297,24 @@
         position: absolute;
         left: calc(50% + 62px);
         top: 50px;
-        width: 34px;
-        height: 42px;
-        border-radius: 16px 16px 12px 12px;
-        background: linear-gradient(180deg, #2e3237, #111418);
-        border: 2px solid #0b0d10;
+        width: 42px;
+        height: 58px;
+        background: url("./car-black.png") center / contain no-repeat;
+        border: 0;
         color: transparent;
         font-size: 0;
-        font-weight: 900;
-        box-shadow: 0 9px 16px rgba(8, 47, 99, 0.22);
+        filter: drop-shadow(0 9px 8px rgba(8, 47, 99, 0.2));
         transition: top 220ms ease, transform 220ms ease;
         z-index: 6;
       }
 
-      .car::before {
-        content: "";
-        position: absolute;
-        left: 7px;
-        right: 7px;
-        top: 6px;
-        height: 12px;
-        border-radius: 8px 8px 4px 4px;
-        background: #8b949e;
-      }
-
+      .car::before,
       .car::after {
-        content: "";
-        position: absolute;
-        left: 8px;
-        right: 8px;
-        bottom: 6px;
-        height: 5px;
-        border-radius: 999px;
-        background: #c7ced6;
+        content: none;
       }
 
       .map.booked .car {
-        background: linear-gradient(180deg, #ff4d42, #b91422);
-        border-color: #7d0e18;
-      }
-
-      .map.booked .car::before {
-        background: #ffd0ca;
-      }
-
-      .map.booked .car::after {
-        background: #ffffff;
+        background-image: url("./car-red.png");
       }
 
       .car.arriving {
@@ -384,37 +356,19 @@
 
       .nearby-car {
         position: absolute;
-        width: 24px;
-        height: 32px;
-        border-radius: 12px 12px 9px 9px;
-        background: linear-gradient(180deg, #4a5057, #181c20);
-        border: 1px solid rgba(0, 0, 0, 0.42);
-        box-shadow: 0 6px 12px rgba(8, 47, 99, 0.18);
+        width: 30px;
+        height: 42px;
+        background: url("./car-black.png") center / contain no-repeat;
+        border: 0;
         color: transparent;
         font-size: 0;
+        filter: drop-shadow(0 6px 5px rgba(8, 47, 99, 0.16));
         z-index: 4;
       }
 
-      .nearby-car::before {
-        content: "";
-        position: absolute;
-        left: 5px;
-        right: 5px;
-        top: 5px;
-        height: 9px;
-        border-radius: 6px 6px 3px 3px;
-        background: #aeb8c2;
-      }
-
+      .nearby-car::before,
       .nearby-car::after {
-        content: "";
-        position: absolute;
-        left: 6px;
-        right: 6px;
-        bottom: 5px;
-        height: 4px;
-        border-radius: 999px;
-        background: #dfe4ea;
+        content: none;
       }
 
       .nearby-car.one { left: 18%; top: 39%; transform: rotate(-20deg); }
@@ -424,7 +378,7 @@
 
       .map.booked .nearby-car {
         opacity: 0.22;
-        filter: grayscale(1);
+        filter: grayscale(1) drop-shadow(0 6px 5px rgba(8, 47, 99, 0.16));
       }
 
       .map-label {
