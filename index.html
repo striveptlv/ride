@@ -207,32 +207,60 @@
 
       .map {
         position: relative;
-        height: 218px;
+        height: 264px;
         margin-bottom: 12px;
         overflow: hidden;
         background:
-          linear-gradient(90deg, transparent 47%, rgba(16, 21, 21, 0.1) 48%, rgba(16, 21, 21, 0.1) 52%, transparent 53%),
-          linear-gradient(0deg, transparent 42%, rgba(16, 21, 21, 0.1) 43%, rgba(16, 21, 21, 0.1) 47%, transparent 48%),
-          linear-gradient(45deg, transparent 39%, rgba(16, 21, 21, 0.08) 40%, rgba(16, 21, 21, 0.08) 44%, transparent 45%),
-          #eaf1f7;
+          linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.16)),
+          url("./mock-map.png") center / cover no-repeat;
+      }
+
+      .map::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.12);
+        pointer-events: none;
+      }
+
+      .map::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), inset 0 -60px 80px rgba(255, 255, 255, 0.18);
+        pointer-events: none;
       }
 
       body.dark .map {
         background:
-          linear-gradient(90deg, transparent 47%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.12) 52%, transparent 53%),
-          linear-gradient(0deg, transparent 42%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.12) 47%, transparent 48%),
-          linear-gradient(45deg, transparent 39%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.1) 44%, transparent 45%),
-          #1d2925;
+          linear-gradient(180deg, rgba(8, 47, 99, 0.2), rgba(8, 47, 99, 0.38)),
+          url("./mock-map.png") center / cover no-repeat;
       }
 
       .route-line {
         position: absolute;
-        left: 46%;
-        top: 34px;
-        width: 12px;
-        height: 132px;
+        left: 50%;
+        top: 54px;
+        width: 72px;
+        height: 136px;
+        border: 8px solid #1877f2;
+        border-left: 0;
+        border-bottom: 0;
+        border-radius: 0 28px 0 0;
+        background: transparent;
+        z-index: 3;
+        filter: drop-shadow(0 2px 3px rgba(24, 119, 242, 0.24));
+      }
+
+      .route-line::after {
+        content: "";
+        position: absolute;
+        right: -8px;
+        bottom: -12px;
+        width: 86px;
+        height: 8px;
         border-radius: 999px;
-        background: var(--ink);
+        background: #1877f2;
       }
 
       .pin {
@@ -247,6 +275,7 @@
         color: white;
         font-weight: 900;
         box-shadow: 0 10px 22px rgba(16, 21, 21, 0.18);
+        z-index: 5;
       }
 
       .pin span {
@@ -254,32 +283,66 @@
       }
 
       .pin.pickup {
-        left: calc(46% - 15px);
-        top: 28px;
+        left: calc(50% - 23px);
+        top: 36px;
       }
 
       .pin.dropoff {
-        left: calc(46% - 15px);
-        top: 146px;
+        left: calc(25% - 18px);
+        top: 178px;
         background: var(--orange);
       }
 
       .car {
         position: absolute;
-        left: calc(46% - 18px);
-        top: 36px;
-        display: grid;
-        place-items: center;
-        width: 48px;
-        height: 34px;
-        border-radius: 13px;
-        background: transparent;
-        color: var(--ink);
-        font-size: 1.6rem;
+        left: calc(50% + 62px);
+        top: 50px;
+        width: 34px;
+        height: 42px;
+        border-radius: 16px 16px 12px 12px;
+        background: linear-gradient(180deg, #2e3237, #111418);
+        border: 2px solid #0b0d10;
+        color: transparent;
+        font-size: 0;
         font-weight: 900;
-        box-shadow: none;
+        box-shadow: 0 9px 16px rgba(8, 47, 99, 0.22);
         transition: top 220ms ease, transform 220ms ease;
-        z-index: 2;
+        z-index: 6;
+      }
+
+      .car::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        right: 7px;
+        top: 6px;
+        height: 12px;
+        border-radius: 8px 8px 4px 4px;
+        background: #8b949e;
+      }
+
+      .car::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        bottom: 6px;
+        height: 5px;
+        border-radius: 999px;
+        background: #c7ced6;
+      }
+
+      .map.booked .car {
+        background: linear-gradient(180deg, #ff4d42, #b91422);
+        border-color: #7d0e18;
+      }
+
+      .map.booked .car::before {
+        background: #ffd0ca;
+      }
+
+      .map.booked .car::after {
+        background: #ffffff;
       }
 
       .car.arriving {
@@ -287,12 +350,81 @@
       }
 
       @keyframes driver-arrival {
-        0% { top: 36px; transform: scale(1); }
-        20% { top: 62px; transform: scale(1.08); }
-        40% { top: 88px; transform: scale(1); }
-        60% { top: 108px; transform: scale(1.08); }
-        80% { top: 124px; transform: scale(1); }
-        100% { top: 132px; transform: scale(1.12); }
+        0% { left: calc(50% + 62px); top: 50px; transform: rotate(90deg) scale(1); }
+        35% { left: calc(50% + 62px); top: 126px; transform: rotate(180deg) scale(1.06); }
+        70% { left: calc(50% + 8px); top: 126px; transform: rotate(270deg) scale(1); }
+        100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
+      }
+
+      .map-block {
+        display: none;
+      }
+
+      .map-block.park {
+        background: #cfe8d4;
+      }
+
+      .map-block.clinic {
+        background: #e8eef8;
+      }
+
+      .map-block.one { left: 6%; top: 10%; width: 28%; height: 22%; }
+      .map-block.two { right: 7%; top: 10%; width: 25%; height: 24%; }
+      .map-block.three { left: 8%; bottom: 12%; width: 28%; height: 22%; }
+      .map-block.four { right: 10%; bottom: 10%; width: 24%; height: 24%; }
+
+      .map-label-small {
+        display: none;
+      }
+
+      .map-label-small.clinic { left: 8%; top: 12%; }
+      .map-label-small.park { right: 9%; bottom: 16%; }
+      .map-label-small.street-a { left: 22%; top: 55%; }
+      .map-label-small.street-b { right: 16%; top: 34%; transform: rotate(28deg); }
+
+      .nearby-car {
+        position: absolute;
+        width: 24px;
+        height: 32px;
+        border-radius: 12px 12px 9px 9px;
+        background: linear-gradient(180deg, #4a5057, #181c20);
+        border: 1px solid rgba(0, 0, 0, 0.42);
+        box-shadow: 0 6px 12px rgba(8, 47, 99, 0.18);
+        color: transparent;
+        font-size: 0;
+        z-index: 4;
+      }
+
+      .nearby-car::before {
+        content: "";
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 5px;
+        height: 9px;
+        border-radius: 6px 6px 3px 3px;
+        background: #aeb8c2;
+      }
+
+      .nearby-car::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        bottom: 5px;
+        height: 4px;
+        border-radius: 999px;
+        background: #dfe4ea;
+      }
+
+      .nearby-car.one { left: 18%; top: 39%; transform: rotate(-20deg); }
+      .nearby-car.two { right: 13%; top: 39%; transform: rotate(28deg); }
+      .nearby-car.three { left: 68%; bottom: 22%; transform: rotate(160deg); }
+      .nearby-car.four { left: 11%; bottom: 18%; transform: rotate(78deg); }
+
+      .map.booked .nearby-car {
+        opacity: 0.22;
+        filter: grayscale(1);
       }
 
       .map-label {
@@ -851,10 +983,22 @@
         <button id="helpButton" class="top-button" type="button" aria-label="Open therapist settings and notes">⚙️</button>
       </header>
 
-      <section class="map" aria-label="Practice map">
+      <section id="practiceMap" class="map" aria-label="Practice map">
+        <div class="map-block one clinic"></div>
+        <div class="map-block two"></div>
+        <div class="map-block three"></div>
+        <div class="map-block four park"></div>
+        <div class="map-label-small clinic">STRIVE PT</div>
+        <div class="map-label-small park">Sunset Park</div>
+        <div class="map-label-small street-a">Warm Springs Rd</div>
+        <div class="map-label-small street-b">Eastern Ave</div>
         <div class="route-line"></div>
         <div class="pin pickup"><span>A</span></div>
         <div class="pin dropoff"><span>B</span></div>
+        <div class="nearby-car one" aria-hidden="true">🚙</div>
+        <div class="nearby-car two" aria-hidden="true">🚗</div>
+        <div class="nearby-car three" aria-hidden="true">🚘</div>
+        <div class="nearby-car four" aria-hidden="true">🚕</div>
         <div id="carIcon" class="car" aria-hidden="true">🚗</div>
         <div id="mapLabel" class="map-label">Practice only. This does not book a real ride.</div>
       </section>
@@ -916,6 +1060,10 @@
           <label class="check-setting">
             <input id="cardDeclinedInput" type="checkbox" />
             <span>Practice card will be declined</span>
+          </label>
+          <label class="field">
+            Required challenge card number
+            <input id="requiredCardInput" inputmode="numeric" autocomplete="off" placeholder="Leave blank to accept any number" />
           </label>
           <button id="themeButton" class="secondary" type="button"><span class="button-emoji">🌙</span>Toggle Day or Night</button>
           <div class="therapist-note">
@@ -1016,6 +1164,7 @@
       const distractor = document.querySelector("#distractor");
       const timer = document.querySelector("#timer");
       const carIcon = document.querySelector("#carIcon");
+      const practiceMap = document.querySelector("#practiceMap");
 
       const storageKey = "ridePracticeSettings";
       const settings = loadSettings();
@@ -1027,9 +1176,9 @@
 
       const state = {
         step: 0,
-        help: settings.mode || "guided",
+        help: settings.mode || "realistic",
         scenario: settings.scenario || "default",
-        pickup: settings.pickup || "STRIVE Wellness Center",
+        pickup: settings.pickup || "STRIVE Physical Therapy",
         destinations: settings.destinations.length ? settings.destinations : [
           "1180 Desert Bloom Court",
           "Green Valley Pharmacy",
@@ -1038,7 +1187,8 @@
         destination: "",
         destinationChoice: "",
         ride: "",
-        payment: "card",
+        payment: settings.mode === "challenge" ? "manual-card" : "card",
+        manualCardNumber: "",
         rating: 0,
         tip: "",
         confirmed: false,
@@ -1083,7 +1233,7 @@
         try {
           const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
           return {
-            mode: saved.mode || "guided",
+            mode: saved.mode || "realistic",
             font: saved.font || "normal",
             theme: saved.theme || "light",
             patientName: saved.patientName || "",
@@ -1091,10 +1241,11 @@
             destinations: Array.isArray(saved.destinations) ? saved.destinations.slice(0, 5) : [],
             scenario: saved.scenario || "default",
             speechRate: saved.speechRate || "0.78",
-            cardDeclined: Boolean(saved.cardDeclined)
+            cardDeclined: Boolean(saved.cardDeclined),
+            requiredCardNumber: saved.requiredCardNumber || ""
           };
         } catch (error) {
-          return { mode: "guided", font: "normal", theme: "light", patientName: "", pickup: "", destinations: [], scenario: "default", speechRate: "0.78", cardDeclined: false };
+          return { mode: "realistic", font: "normal", theme: "light", patientName: "", pickup: "", destinations: [], scenario: "default", speechRate: "0.78", cardDeclined: false, requiredCardNumber: "" };
         }
       }
 
@@ -1139,6 +1290,7 @@
         clearInterval(stepTimer);
         clearInterval(arrivalTimer);
         carIcon.classList.remove("arriving");
+        practiceMap.classList.toggle("booked", state.confirmed || state.step >= 6);
         document.body.classList.toggle("home-screen", state.step === 0);
         const current = steps[state.step];
         const coach = getCoach(current);
@@ -1190,6 +1342,14 @@
 
       function actionClass() {
         return state.help === "guided" ? " highlight" : "";
+      }
+
+      function defaultPayment() {
+        return state.help === "challenge" ? "manual-card" : "card";
+      }
+
+      function normalizeCardNumber(value) {
+        return String(value).replace(/\D/g, "");
       }
 
       function renderMode() {
@@ -1297,9 +1457,12 @@
       }
 
       function renderPayment() {
-        if (state.help === "challenge" && state.payment === "card") state.payment = "cash";
+        if (state.help === "challenge" && state.payment === "card") state.payment = "manual-card";
         const choices = state.help === "challenge"
-          ? [["cash", "Pay with cash", "No saved card available", "💵"]]
+          ? [
+            ["manual-card", "Enter credit card", "No saved card available", "💳"],
+            ["cash", "Pay with cash", "Practice option only", "💵"]
+          ]
           : [
             ["card", "Practice card", settings.cardDeclined ? "Card ending 8475 - declined" : "Card ending 8475", "💳"],
             ["cash", "Pay with cash", "Practice option only", "💵"]
@@ -1316,7 +1479,13 @@
               </button>
             `).join("")}
           </div>
-          <p id="paymentError" class="error-message hidden">Card declined. Choose another payment method.</p>
+          ${state.help === "challenge" && state.payment === "manual-card" ? `
+            <label class="field">
+              Credit card number
+              <input id="manualCardInput" inputmode="numeric" autocomplete="off" value="${escapeHtml(state.manualCardNumber)}" placeholder="Enter card number" />
+            </label>
+          ` : ""}
+          <p id="paymentError" class="error-message hidden">Payment could not be accepted. Choose another payment method or check the card number.</p>
           <div class="row">
             <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
             <button class="primary${actionClass()}" type="button" data-next><span class="button-emoji">➡️</span>Continue</button>
@@ -1373,7 +1542,7 @@
           <button class="danger" type="button" data-cancel style="margin-top: 18px;"><span class="button-emoji">❌</span>Cancel Ride</button>
           <p id="cancelFeeMessage" class="error-message hidden" aria-live="polite">Cancellation fee charged: $5.00</p>
           <button id="bookAnotherButton" class="primary hidden" type="button" data-book-another style="margin-top: 14px;"><span class="button-emoji">🚘</span>Book Another Ride</button>
-          <button id="finishRideButton" class="primary hidden" type="button" data-next style="margin-top: 14px;"><span class="button-emoji">🚗</span>Get In the Car</button>
+          <button id="finishRideButton" class="primary hidden" type="button" data-next style="margin-top: 14px;"><span class="button-emoji">🚗</span>Confirm I Am in the Vehicle</button>
         `;
         startArrivalCountdown();
       }
@@ -1454,6 +1623,7 @@
       }
 
       function paymentLabel() {
+        if (state.payment === "manual-card") return "Entered credit card";
         return state.payment === "cash" ? "Pay with cash" : "Practice card ending 8475";
       }
 
@@ -1511,7 +1681,7 @@
 
         if (button.dataset.help) {
           state.help = button.dataset.help;
-          if (state.help === "challenge" && state.payment === "card") state.payment = "cash";
+          state.payment = defaultPayment();
           settings.mode = state.help;
           saveSettings();
           render();
@@ -1583,6 +1753,18 @@
             if (error) error.classList.remove("hidden");
             coachText.textContent = "Card declined. Choose another payment method.";
             return;
+          }
+
+          if (state.step === 4 && state.payment === "manual-card") {
+            const enteredCard = normalizeCardNumber(state.manualCardNumber);
+            const requiredCard = normalizeCardNumber(settings.requiredCardNumber);
+            if (!enteredCard || (requiredCard && enteredCard !== requiredCard)) {
+              state.session.errors += 1;
+              const error = document.querySelector("#paymentError");
+              if (error) error.classList.remove("hidden");
+              coachText.textContent = requiredCard ? "Card number does not match. Try again." : "Enter a credit card number to continue.";
+              return;
+            }
           }
 
           if (state.step === 2 && state.destinationChoice === "custom" && state.destination.length < 3) {
@@ -1662,6 +1844,12 @@
           if (error) error.classList.add("hidden");
         }
 
+        if (event.target.id === "manualCardInput") {
+          state.manualCardNumber = event.target.value.trim();
+          const error = document.querySelector("#paymentError");
+          if (error) error.classList.add("hidden");
+        }
+
         if (event.target.id === "modeScenarioSelect") {
           state.scenario = event.target.value;
           settings.scenario = state.scenario;
@@ -1675,7 +1863,8 @@
         state.destination = "";
         state.destinationChoice = "";
         state.ride = "";
-        state.payment = state.help === "challenge" ? "cash" : "card";
+        state.payment = defaultPayment();
+        state.manualCardNumber = "";
         state.rating = 0;
         state.tip = "";
         state.confirmed = false;
@@ -1704,7 +1893,8 @@
         state.destination = "";
         state.destinationChoice = "";
         state.ride = "";
-        state.payment = state.help === "challenge" ? "cash" : "card";
+        state.payment = defaultPayment();
+        state.manualCardNumber = "";
         state.rating = 0;
         state.tip = "";
         state.prices = makePrices(state.scenario);
@@ -1764,6 +1954,7 @@
         document.querySelector("#scenarioSelect").value = state.scenario;
         document.querySelector("#speechRateSelect").value = settings.speechRate;
         document.querySelector("#cardDeclinedInput").checked = settings.cardDeclined;
+        document.querySelector("#requiredCardInput").value = settings.requiredCardNumber;
         therapistModal.classList.add("open");
       });
 
@@ -1791,6 +1982,7 @@
         settings.scenario = document.querySelector("#scenarioSelect").value;
         settings.speechRate = document.querySelector("#speechRateSelect").value;
         settings.cardDeclined = document.querySelector("#cardDeclinedInput").checked;
+        settings.requiredCardNumber = document.querySelector("#requiredCardInput").value.trim();
         state.pickup = settings.pickup || state.pickup;
         state.destinations = settings.destinations.length ? settings.destinations : state.destinations;
         state.scenario = settings.scenario;

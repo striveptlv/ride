@@ -1,9 +1,11 @@
-const CACHE_NAME = "strive-ride-share-v15";
+const CACHE_NAME = "strive-ride-share-v19";
 const APP_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon.svg"
+  "./icon.svg",
+  "./logo.png",
+  "./mock-map.png"
 ];
 
 self.addEventListener("install", (event) => {
