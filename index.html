@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#2f7d56" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="STRIVE Ride" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>STRIVE Ride Share Practice</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f3f7fb;
+        --panel: #ffffff;
+        --ink: #082f63;
+        --muted: #40556e;
+        --soft: #edf3f8;
+        --line: rgba(8, 47, 99, 0.16);
+        --focus: #0a4f93;
+        --green: #0a4f93;
+        --yellow: #f3c642;
+        --orange: #ff8a00;
+        --danger: #9a2f23;
+        --navy: #082f63;
+        --navy-deep: #021a3a;
+        --shadow: 0 18px 40px rgba(8, 47, 99, 0.14);
+        --base-size: 17px;
+      }
+
+      body.dark {
+        color-scheme: dark;
+        --bg: #111816;
+        --panel: #1c2522;
+        --ink: #f7faf7;
+        --muted: #c3cec9;
+        --soft: #28322f;
+        --line: rgba(247, 250, 247, 0.18);
+        --focus: #8eb6ff;
+        --green: #8eb6ff;
+        --yellow: #f3c642;
+        --orange: #f1a16f;
+        --danger: #ffb0a5;
+        --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      }
+
+      body.font-large {
+        --base-size: 19px;
+      }
+
+      body.font-xl {
+        --base-size: 21px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: var(--base-size);
+        color: var(--ink);
+        background:
+          linear-gradient(135deg, rgba(255, 138, 0, 0.18), transparent 32%),
+          linear-gradient(315deg, rgba(8, 47, 99, 0.14), transparent 30%),
+          var(--bg);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        min-height: 48px;
+        border: 0;
+        cursor: pointer;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 4px solid rgba(36, 91, 186, 0.32);
+        outline-offset: 2px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .app {
+        width: min(100%, 460px);
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: max(12px, env(safe-area-inset-top)) 14px max(24px, env(safe-area-inset-bottom));
+      }
+
+      body.home-screen .map,
+      body.home-screen .coach,
+      body.home-screen .distractor {
+        display: none;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .home-link,
+      .top-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        height: 52px;
+        padding: 0 10px;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--panel) 92%, transparent);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.76rem;
+        font-weight: 900;
+      }
+
+      .top-button,
+      .home-link {
+        font-size: 1.28rem;
+      }
+
+      .brand {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+        padding: 12px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #ffffff, #eef4fb);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .home-link {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      #fontButton { grid-column: 2; grid-row: 2; }
+      #helpButton { grid-column: 3; grid-row: 2; }
+
+      .brand strong,
+      .brand span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .brand strong {
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .brand span {
+        font-size: 0.74rem;
+        color: var(--orange);
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .brand-logo {
+        width: 54px;
+        height: 54px;
+        object-fit: contain;
+      }
+
+      .panel,
+      .sheet,
+      .map,
+      .coach,
+      .distractor {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--panel) 94%, transparent);
+        box-shadow: var(--shadow);
+      }
+
+      .map {
+        position: relative;
+        height: 218px;
+        margin-bottom: 12px;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, transparent 47%, rgba(16, 21, 21, 0.1) 48%, rgba(16, 21, 21, 0.1) 52%, transparent 53%),
+          linear-gradient(0deg, transparent 42%, rgba(16, 21, 21, 0.1) 43%, rgba(16, 21, 21, 0.1) 47%, transparent 48%),
+          linear-gradient(45deg, transparent 39%, rgba(16, 21, 21, 0.08) 40%, rgba(16, 21, 21, 0.08) 44%, transparent 45%),
+          #eaf1f7;
+      }
+
+      body.dark .map {
+        background:
+          linear-gradient(90deg, transparent 47%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.12) 52%, transparent 53%),
+          linear-gradient(0deg, transparent 42%, rgba(255, 255, 255, 0.12) 43%, rgba(255, 255, 255, 0.12) 47%, transparent 48%),
+          linear-gradient(45deg, transparent 39%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.1) 44%, transparent 45%),
+          #1d2925;
+      }
+
+      .route-line {
+        position: absolute;
+        left: 46%;
+        top: 34px;
+        width: 12px;
+        height: 132px;
+        border-radius: 999px;
+        background: var(--ink);
+      }
+
+      .pin {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50% 50% 50% 6px;
+        transform: rotate(-45deg);
+        background: var(--green);
+        color: white;
+        font-weight: 900;
+        box-shadow: 0 10px 22px rgba(16, 21, 21, 0.18);
+      }
+
+      .pin span {
+        transform: rotate(45deg);
+      }
+
+      .pin.pickup {
+        left: calc(46% - 15px);
+        top: 28px;
+      }
+
+      .pin.dropoff {
+        left: calc(46% - 15px);
+        top: 146px;
+        background: var(--orange);
+      }
+
+      .car {
+        position: absolute;
+        left: calc(46% - 18px);
+        top: 36px;
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 34px;
+        border-radius: 13px;
+        background: transparent;
+        color: var(--ink);
+        font-size: 1.6rem;
+        font-weight: 900;
+        box-shadow: none;
+        transition: top 220ms ease, transform 220ms ease;
+        z-index: 2;
+      }
+
+      .car.arriving {
+        animation: driver-arrival 12s ease-in-out forwards;
+      }
+
+      @keyframes driver-arrival {
+        0% { top: 36px; transform: scale(1); }
+        20% { top: 62px; transform: scale(1.08); }
+        40% { top: 88px; transform: scale(1); }
+        60% { top: 108px; transform: scale(1.08); }
+        80% { top: 124px; transform: scale(1); }
+        100% { top: 132px; transform: scale(1.12); }
+      }
+
+      .map-label {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: color-mix(in srgb, var(--panel) 90%, transparent);
+        font-size: 0.86rem;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .distractor {
+        display: none;
+        margin-bottom: 12px;
+        padding: 14px;
+        background: #f0fff4;
+        color: #17462f;
+        font-weight: 900;
+        width: 100%;
+        text-align: left;
+      }
+
+      .distractor small {
+        display: block;
+        margin-top: 2px;
+        color: #3f6d55;
+        font-weight: 800;
+      }
+
+      .distractor.show {
+        display: block;
+      }
+
+      .font-sizes {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 1px;
+        line-height: 1;
+      }
+
+      .font-sizes span:nth-child(1) { font-size: 0.62rem; }
+      .font-sizes span:nth-child(2) { font-size: 0.82rem; }
+      .font-sizes span:nth-child(3) { font-size: 1.02rem; }
+      .font-sizes span:nth-child(4) { font-size: 1.22rem; }
+
+      .coach {
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+
+      .coach-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .coach-number {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        flex: 0 0 auto;
+        border-radius: 12px;
+        background: var(--focus);
+        color: #ffffff;
+        font-weight: 900;
+      }
+
+      .coach p {
+        margin: 0;
+        line-height: 1.4;
+        font-weight: 850;
+      }
+
+      .timer {
+        margin-left: auto;
+        color: var(--danger);
+        font-weight: 900;
+      }
+
+      .progress {
+        height: 10px;
+        margin-top: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: var(--soft);
+      }
+
+      .progress span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--green), var(--focus));
+        transition: width 180ms ease;
+      }
+
+      .sheet {
+        padding: 18px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(2rem, 11vw, 3rem);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .hero-word {
+        margin-bottom: 2px;
+        font-size: clamp(3rem, 18vw, 5.2rem);
+        line-height: 0.9;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .hero-st {
+        color: var(--navy);
+      }
+
+      .hero-ride {
+        color: var(--orange);
+      }
+
+      .hero-subheading {
+        margin-bottom: 18px;
+        color: var(--navy);
+        font-size: 1.15rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin-bottom: 12px;
+        font-size: 1.42rem;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 12px;
+        margin: 18px 0 22px;
+        font-weight: 850;
+      }
+
+      input,
+      select {
+        width: 100%;
+        min-height: 60px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+        color: var(--ink);
+      }
+
+      .choice {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        padding: 16px;
+        border: 2px solid transparent;
+        border-radius: 18px;
+        background: var(--soft);
+        color: var(--ink);
+        text-align: left;
+      }
+
+      .choice.selected {
+        border-color: var(--focus);
+        background: color-mix(in srgb, var(--focus) 12%, var(--panel));
+      }
+
+      .choice.highlight {
+        animation: pulse-focus 1.4s ease-in-out infinite;
+      }
+
+      @keyframes pulse-focus {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(36, 91, 186, 0.24); }
+        50% { box-shadow: 0 0 0 7px rgba(36, 91, 186, 0.08); }
+      }
+
+      .choice-icon {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--panel);
+        font-size: 0.8rem;
+        font-weight: 900;
+      }
+
+      .choice-icon.emoji {
+        background: transparent;
+        font-size: 1.9rem;
+      }
+
+      .mode-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .mode-button {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        min-height: 76px;
+        padding: 14px 16px;
+        border: 2px solid transparent;
+        border-radius: 20px;
+        background: var(--soft);
+        color: var(--ink);
+        font-weight: 900;
+        text-align: left;
+      }
+
+      .mode-button.selected {
+        border-color: var(--focus);
+        background: color-mix(in srgb, var(--focus) 12%, var(--panel));
+      }
+
+      .mode-button span {
+        display: block;
+      }
+
+      .mode-emoji {
+        margin-bottom: 0;
+        font-size: 2rem;
+      }
+
+      .choice strong,
+      .choice span {
+        display: block;
+      }
+
+      .choice small {
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .primary,
+      .secondary,
+      .danger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        border-radius: 16px;
+        padding: 17px 16px;
+        font-weight: 900;
+        line-height: 1.2;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .sheet > button + button,
+      .sheet > .row + button,
+      .sheet > button + .row,
+      .sheet > p + button {
+        margin-top: 14px;
+      }
+
+      .button-emoji {
+        display: inline-block;
+        margin-right: 0;
+        font-size: 1.35em;
+        vertical-align: -0.12em;
+      }
+
+      .primary {
+        background: linear-gradient(135deg, var(--navy), var(--navy-deep));
+        color: #ffffff;
+        box-shadow: 0 12px 22px rgba(8, 47, 99, 0.18);
+      }
+
+      .primary:disabled {
+        opacity: 0.42;
+        cursor: not-allowed;
+      }
+
+      .secondary {
+        background: var(--soft);
+        color: var(--ink);
+      }
+
+      .danger {
+        background: #fee9e5;
+        color: #9a2f23;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      @media (min-width: 440px) {
+        .row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .summary,
+      .note-list {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .summary div,
+      .note-list div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--soft);
+      }
+
+      .summary span,
+      .note-list span {
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .summary strong,
+      .note-list strong {
+        text-align: right;
+      }
+
+      .driver-card {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 14px;
+        border-radius: 18px;
+        background: var(--soft);
+      }
+
+      .driver-photo {
+        display: grid;
+        place-items: center;
+        width: 62px;
+        height: 62px;
+        border-radius: 20px;
+        background: var(--yellow);
+        color: #101515;
+        font-size: 1.2rem;
+        font-weight: 900;
+      }
+
+      .driver-card p {
+        margin-bottom: 3px;
+      }
+
+      .checklist {
+        list-style: none;
+        display: grid;
+        gap: 8px;
+        margin: 12px 0 0;
+        padding: 0;
+      }
+
+      .checklist li {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .check {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--green);
+        color: white;
+        font-size: 0.62rem;
+        font-weight: 900;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--green) 16%, var(--panel));
+        color: var(--green);
+        font-weight: 900;
+      }
+
+      .stars,
+      .tips {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .tips {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .star-button,
+      .tip-button {
+        border-radius: 14px;
+        background: var(--soft);
+        color: var(--ink);
+        font-weight: 900;
+      }
+
+      .star-button {
+        color: #8a8f8c;
+        font-size: 1.75rem;
+      }
+
+      .star-button.selected {
+        background: #fff3b0;
+        color: #9a6b00;
+      }
+
+      .tip-button.selected {
+        background: var(--focus);
+        color: white;
+      }
+
+      .error-message {
+        margin: 10px 0 0;
+        color: var(--danger);
+        font-weight: 900;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        align-items: flex-end;
+        padding: 14px;
+        background: rgba(0, 0, 0, 0.42);
+      }
+
+      .modal-backdrop.open {
+        display: flex;
+      }
+
+      .modal {
+        width: min(100%, 560px);
+        max-height: 86dvh;
+        margin: 0 auto;
+        overflow: auto;
+        padding: 18px;
+        border-radius: 24px;
+        background: var(--panel);
+        color: var(--ink);
+      }
+
+      .settings-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .therapist-note {
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--soft);
+        line-height: 1.45;
+      }
+
+      .check-setting {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+        padding: 14px;
+        border-radius: 16px;
+        background: var(--soft);
+        font-weight: 900;
+      }
+
+      .check-setting input {
+        width: 28px;
+        height: 28px;
+        min-height: 28px;
+        padding: 0;
+        accent-color: var(--focus);
+      }
+
+      .footer-note {
+        margin: 14px 4px 0;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.4;
+      }
+
+      @media (min-width: 720px) {
+        body {
+          display: grid;
+          place-items: center;
+        }
+
+        .app {
+          min-height: auto;
+          padding-block: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <a class="home-link" href="./index.html" aria-label="Home">Home</a>
+        <div class="brand">
+          <img class="brand-logo" src="./logo.png" alt="STRIVE logo" />
+          <div>
+            <strong>STRIVE Ride Share</strong>
+            <span>Practice Booking App</span>
+          </div>
+        </div>
+        <button id="fontButton" class="top-button" type="button" aria-label="Change font size"><span class="font-sizes" aria-hidden="true"><span>A</span><span>A</span><span>A</span><span>A</span></span></button>
+        <button id="helpButton" class="top-button" type="button" aria-label="Open therapist settings and notes">⚙️</button>
+      </header>
+
+      <section class="map" aria-label="Practice map">
+        <div class="route-line"></div>
+        <div class="pin pickup"><span>A</span></div>
+        <div class="pin dropoff"><span>B</span></div>
+        <div id="carIcon" class="car" aria-hidden="true">🚗</div>
+        <div id="mapLabel" class="map-label">Practice only. This does not book a real ride.</div>
+      </section>
+
+      <button id="distractor" class="distractor" type="button">
+        🍽️ STRIVE Eats: Free delivery today
+      </button>
+
+      <section class="coach" aria-live="polite">
+        <div class="coach-row">
+          <div id="stepNumber" class="coach-number">1</div>
+          <p id="coachText">Start by choosing the amount of help you want.</p>
+          <div id="timer" class="timer hidden">60</div>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+      </section>
+
+      <section id="screen" class="sheet"></section>
+
+      <p class="footer-note">
+        Training simulator only. No location, payment, message, phone call, or ride request is sent.
+      </p>
+    </main>
+
+    <div id="therapistModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="therapistTitle">
+      <div class="modal">
+        <h2 id="therapistTitle">Therapist Setup and Notes</h2>
+        <div class="settings-grid">
+          <label class="field">
+            Patient first name
+            <input id="patientNameInput" autocomplete="off" />
+          </label>
+          <label class="field">
+            Custom pickup
+            <input id="pickupSetupInput" autocomplete="off" />
+          </label>
+          <label class="field">
+            Custom destinations, one per line
+            <textarea id="destinationsSetupInput" rows="5" style="min-height: 130px; padding: 14px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font: inherit;"></textarea>
+          </label>
+          <label class="field">
+            Scenario
+            <select id="scenarioSelect">
+              <option value="default">Standard ride</option>
+              <option value="doctor">Doctor's appointment</option>
+              <option value="grocery">Grocery run</option>
+              <option value="driver-cancel">Driver cancels</option>
+              <option value="surge">Surge pricing</option>
+            </select>
+          </label>
+          <label class="field">
+            Speech speed
+            <select id="speechRateSelect">
+              <option value="0.78">Slow</option>
+              <option value="0.92">Normal</option>
+            </select>
+          </label>
+          <button id="settingsReadButton" class="secondary" type="button"><span class="button-emoji">🔊</span>Read Current Step</button>
+          <label class="check-setting">
+            <input id="cardDeclinedInput" type="checkbox" />
+            <span>Practice card will be declined</span>
+          </label>
+          <button id="themeButton" class="secondary" type="button"><span class="button-emoji">🌙</span>Toggle Day or Night</button>
+          <div class="therapist-note">
+            <strong>Clinical notes:</strong> Pickup checks train orientation and error monitoring.
+            Destination entry trains visual scanning and problem solving. Ride selection trains
+            comparison, money awareness, and impulse control. The driver screen trains safety checks:
+            name, vehicle color, and plate before entering.
+          </div>
+          <div class="therapist-note">
+            <strong>Suggested prompts:</strong> "What step are you on?" "What should you check before
+            you confirm?" "What information tells you this is the correct car?"
+          </div>
+          <div class="row">
+            <button id="saveSettingsButton" class="primary" type="button"><span class="button-emoji">✅</span>Save Setup</button>
+            <button id="closeSettingsButton" class="secondary" type="button"><span class="button-emoji">↩️</span>Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="failureModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="failureTitle">
+      <div class="modal">
+        <h2 id="failureTitle">Simulation Failed</h2>
+        <p class="muted">
+          The ride was cancelled, so the rider cannot get in the car. Book another ride and try again.
+        </p>
+        <button class="primary" type="button" data-book-another><span class="button-emoji">🚘</span>Book Another Ride</button>
+        <button id="closeFailureButton" class="secondary" type="button" style="margin-top: 14px;"><span class="button-emoji">↩️</span>Close</button>
+      </div>
+    </div>
+
+    <div id="medicalModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="medicalTitle">
+      <div class="modal">
+        <h2 id="medicalTitle">Choose Medical Location</h2>
+        <p class="muted">Several locations look similar. Pick the correct practice destination.</p>
+        <div class="stack">
+          <button class="choice" type="button" data-medical-choice="Horizon Medical Clinic">
+            <span class="choice-icon emoji">🏥</span>
+            <span><strong>Horizon Medical Clinic</strong><small>Primary care appointment</small></span>
+            <strong>Pick</strong>
+          </button>
+          <button class="choice" type="button" data-medical-choice="Horizon Imaging Center">
+            <span class="choice-icon emoji">🏥</span>
+            <span><strong>Horizon Imaging Center</strong><small>X-ray and scans</small></span>
+            <strong>Pick</strong>
+          </button>
+          <button class="choice" type="button" data-medical-choice="Horizon Rehab Clinic">
+            <span class="choice-icon emoji">🏥</span>
+            <span><strong>Horizon Rehab Clinic</strong><small>Therapy follow-up</small></span>
+            <strong>Pick</strong>
+          </button>
+        </div>
+        <button id="closeMedicalButton" class="secondary" type="button" style="margin-top: 14px;"><span class="button-emoji">↩️</span>Close</button>
+      </div>
+    </div>
+
+    <div id="surgeModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="surgeTitle">
+      <div class="modal">
+        <h2 id="surgeTitle">Prices Are Higher</h2>
+        <p class="muted">
+          Surge pricing is active because fewer cars are nearby. Review the price before choosing a ride.
+        </p>
+        <button id="closeSurgeButton" class="primary" type="button"><span class="button-emoji">✅</span>Review Prices</button>
+      </div>
+    </div>
+
+    <div id="eatsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eatsTitle">
+      <div class="modal">
+        <h2 id="eatsTitle">Wrong App</h2>
+        <p class="muted">
+          STRIVE Eats is a food delivery ad. This simulation is for booking a ride. Close this and return to the ride task.
+        </p>
+        <button id="closeEatsButton" class="primary" type="button"><span class="button-emoji">↩️</span>Back to Ride</button>
+      </div>
+    </div>
+
+    <script>
+      const screen = document.querySelector("#screen");
+      const coachText = document.querySelector("#coachText");
+      const stepNumber = document.querySelector("#stepNumber");
+      const progressBar = document.querySelector("#progressBar");
+      const mapLabel = document.querySelector("#mapLabel");
+      const fontButton = document.querySelector("#fontButton");
+      const helpButton = document.querySelector("#helpButton");
+      const therapistModal = document.querySelector("#therapistModal");
+      const failureModal = document.querySelector("#failureModal");
+      const medicalModal = document.querySelector("#medicalModal");
+      const surgeModal = document.querySelector("#surgeModal");
+      const eatsModal = document.querySelector("#eatsModal");
+      const closeSettingsButton = document.querySelector("#closeSettingsButton");
+      const saveSettingsButton = document.querySelector("#saveSettingsButton");
+      const closeFailureButton = document.querySelector("#closeFailureButton");
+      const closeMedicalButton = document.querySelector("#closeMedicalButton");
+      const closeSurgeButton = document.querySelector("#closeSurgeButton");
+      const closeEatsButton = document.querySelector("#closeEatsButton");
+      const settingsReadButton = document.querySelector("#settingsReadButton");
+      const themeButton = document.querySelector("#themeButton");
+      const distractor = document.querySelector("#distractor");
+      const timer = document.querySelector("#timer");
+      const carIcon = document.querySelector("#carIcon");
+
+      const storageKey = "ridePracticeSettings";
+      const settings = loadSettings();
+      const drivers = [
+        { name: "Jamie R.", car: "Silver Toyota Camry", plate: "PRACTICE", initials: "JR" },
+        { name: "Ana M.", car: "Blue Honda Accord", plate: "SAFE123", initials: "AM" },
+        { name: "Marcus T.", car: "White Kia Niro", plate: "RIDE55", initials: "MT" }
+      ];
+
+      const state = {
+        step: 0,
+        help: settings.mode || "guided",
+        scenario: settings.scenario || "default",
+        pickup: settings.pickup || "STRIVE Wellness Center",
+        destinations: settings.destinations.length ? settings.destinations : [
+          "1180 Desert Bloom Court",
+          "Green Valley Pharmacy",
+          "Horizon Medical Clinic"
+        ],
+        destination: "",
+        destinationChoice: "",
+        ride: "",
+        payment: "card",
+        rating: 0,
+        tip: "",
+        confirmed: false,
+        cancelled: false,
+        driverCancelled: false,
+        arrivalDone: false,
+        surgePopupShown: false,
+        prices: makePrices(settings.scenario),
+        driver: drivers[Math.floor(Math.random() * drivers.length)],
+        session: {
+          start: Date.now(),
+          stepStarted: Date.now(),
+          stepTimes: [],
+          backs: 0,
+          hints: 0,
+          errors: 0,
+          cancellations: 0,
+          cancellationFee: 0,
+          usedLocation: false,
+          rebooked: false
+        }
+      };
+
+      const steps = [
+        { title: "Choose Practice Mode", guided: "Start by choosing the amount of help you want.", realistic: "Choose a practice mode.", challenge: "", map: "Practice only. This does not book a real ride.", render: renderMode },
+        { title: "Check Pickup", guided: "Make sure the pickup place is correct before you move on.", realistic: "Confirm pickup.", challenge: "Confirm the pickup location.", map: "Pickup is marked with A.", render: renderPickup },
+        { title: "Enter Destination", guided: "Choose where the practice ride should go.", realistic: "Enter destination.", challenge: "Choose or type the destination.", map: "Drop-off is marked with B.", render: renderDestination },
+        { title: "Pick Ride Type", guided: "Compare the ride choices. Pick the one that fits the task.", realistic: "Choose a ride.", challenge: "Choose a ride option.", map: "A sample driver is nearby.", render: renderRide },
+        { title: "Payment Method", guided: "Check how the ride would be paid for. This is practice, so no money is charged.", realistic: "Review payment.", challenge: "Choose payment.", map: "Payment is part of the ride review.", render: renderPayment },
+        { title: "Review and Confirm", guided: "Review pickup, destination, ride type, and payment before confirming.", realistic: "Review ride details.", challenge: "Review and confirm.", map: "The route is ready to review.", render: renderConfirm },
+        { title: "Wait for Driver", guided: "Check the driver details and wait in a safe visible place.", realistic: "Driver arriving.", challenge: "Check driver and car.", map: "Driver arriving in 4 minutes.", render: renderWaiting },
+        { title: "Rate and Tip", guided: "Practice rating the ride and choosing a tip. No tip will be charged.", realistic: "Rate your ride.", challenge: "Rate and tip.", map: "Ride is complete.", render: renderRating },
+        { title: "Practice Complete", guided: "You completed the ride-booking practice task.", realistic: "Practice complete.", challenge: "Complete.", map: "Practice complete.", render: renderComplete }
+      ];
+
+      let stepTimer = null;
+      let arrivalTimer = null;
+      let countdown = 60;
+      let arrivalTick = 4;
+
+      function loadSettings() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+          return {
+            mode: saved.mode || "guided",
+            font: saved.font || "normal",
+            theme: saved.theme || "light",
+            patientName: saved.patientName || "",
+            pickup: saved.pickup || "",
+            destinations: Array.isArray(saved.destinations) ? saved.destinations.slice(0, 5) : [],
+            scenario: saved.scenario || "default",
+            speechRate: saved.speechRate || "0.78",
+            cardDeclined: Boolean(saved.cardDeclined)
+          };
+        } catch (error) {
+          return { mode: "guided", font: "normal", theme: "light", patientName: "", pickup: "", destinations: [], scenario: "default", speechRate: "0.78", cardDeclined: false };
+        }
+      }
+
+      function saveSettings() {
+        localStorage.setItem(storageKey, JSON.stringify(settings));
+      }
+
+      function applySettings() {
+        document.body.classList.toggle("font-large", settings.font === "large");
+        document.body.classList.toggle("font-xl", settings.font === "xl");
+        document.body.classList.toggle("dark", settings.theme === "dark");
+      }
+
+      function makePrices(scenario) {
+        const surge = scenario === "surge";
+        const variation = () => Math.random() * 3 - 1.5;
+        const price = (base) => Math.max(5, (base + variation()) * (surge ? 1.2 : 1));
+        return {
+          standard: price(14.2).toFixed(2),
+          assist: price(16.8).toFixed(2),
+          xl: price(21.4).toFixed(2),
+          surge
+        };
+      }
+
+      function setStep(nextStep) {
+        recordStepTime();
+        state.step = Math.max(0, Math.min(nextStep, steps.length - 1));
+        state.session.stepStarted = Date.now();
+        state.arrivalDone = false;
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        vibrate(18);
+      }
+
+      function recordStepTime() {
+        const elapsed = Math.round((Date.now() - state.session.stepStarted) / 1000);
+        state.session.stepTimes[state.step] = (state.session.stepTimes[state.step] || 0) + elapsed;
+      }
+
+      function render() {
+        clearInterval(stepTimer);
+        clearInterval(arrivalTimer);
+        carIcon.classList.remove("arriving");
+        document.body.classList.toggle("home-screen", state.step === 0);
+        const current = steps[state.step];
+        const coach = getCoach(current);
+        stepNumber.textContent = String(state.step + 1);
+        coachText.textContent = coach || current.challenge || current.title;
+        mapLabel.textContent = current.map;
+        progressBar.style.width = `${(state.step / (steps.length - 1)) * 100}%`;
+        distractor.classList.toggle("show", shouldShowDistractor());
+        current.render();
+        updateChallengeTimer();
+      }
+
+      function getCoach(current) {
+        if (state.help === "guided") {
+          const name = settings.patientName ? `${settings.patientName}, ` : "";
+          return `${name}${current.guided}`;
+        }
+        if (state.help === "realistic") return current.realistic;
+        return "";
+      }
+
+      function challengeHint(text) {
+        return "";
+      }
+
+      function shouldShowDistractor() {
+        return state.step === 2 && (state.help === "realistic" || state.help === "challenge");
+      }
+
+      function updateChallengeTimer() {
+        timer.classList.toggle("hidden", state.help !== "challenge" || state.step === 0 || state.step === steps.length - 1);
+        if (timer.classList.contains("hidden")) return;
+        countdown = 60;
+        timer.textContent = countdown;
+        stepTimer = setInterval(() => {
+          countdown -= 1;
+          timer.textContent = countdown;
+          if (countdown <= 0) {
+            state.session.errors += 1;
+            clearInterval(stepTimer);
+            coachText.textContent = "Time is up. Take a breath and continue the practice step.";
+          }
+        }, 1000);
+      }
+
+      function selectedClass(value, expected) {
+        return value === expected ? " selected" : "";
+      }
+
+      function actionClass() {
+        return state.help === "guided" ? " highlight" : "";
+      }
+
+      function renderMode() {
+        screen.innerHTML = `
+          <h1 class="hero-word"><span class="hero-st">ST</span><span class="hero-ride">RIDE</span></h1>
+          <p class="hero-subheading">Ride Share Simulator</p>
+          <div class="stack">
+            <button class="primary${actionClass()}" type="button" data-next><span class="button-emoji">🚘</span>Start Practice</button>
+            <div class="mode-grid" role="group" aria-label="Practice mode">
+              <button class="mode-button${selectedClass(state.help, "guided")}" type="button" data-help="guided">
+                <span class="mode-emoji">🧭</span>
+                <span>Guided</span>
+              </button>
+              <button class="mode-button${selectedClass(state.help, "realistic")}" type="button" data-help="realistic">
+                <span class="mode-emoji">📱</span>
+                <span>Realistic</span>
+              </button>
+              <button class="mode-button${selectedClass(state.help, "challenge")}" type="button" data-help="challenge">
+                <span class="mode-emoji">⏱️</span>
+                <span>Challenge</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPickup() {
+        screen.innerHTML = `
+          <h2>Pickup Location</h2>
+          <button class="primary${actionClass()}" type="button" data-use-location><span class="button-emoji">📍</span>Use Device Location</button>
+          <p id="locationMessage" class="muted" aria-live="polite"></p>
+          <label class="field">
+            Pickup if typing manually
+            <input id="pickupInput" value="${escapeHtml(state.pickup)}" autocomplete="off" />
+          </label>
+          <div class="row">
+            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next><span class="button-emoji">✅</span>Pickup Looks Right</button>
+          </div>
+        `;
+      }
+
+      function renderDestination() {
+        const options = scenarioDestinations();
+        const customValue = state.destinationChoice === "custom" ? state.destination : "";
+        screen.innerHTML = `
+          <h2>Where To?</h2>
+          <div class="stack" role="group" aria-label="Destination choices">
+            ${options.map((address, index) => `
+              <button class="choice${selectedClass(state.destinationChoice, String(index))}" type="button" data-destination="${index}" data-address="${escapeHtml(address)}" ${address === "Medical Appointment" ? "data-medical-destination" : ""}>
+                <span class="choice-icon emoji">📍</span>
+                <span><strong>${destinationLabel(index)}</strong><small>${escapeHtml(address)}</small></span>
+                <strong>Pick</strong>
+              </button>
+            `).join("")}
+          </div>
+          <label class="field">
+            Or type a practice destination
+            <input id="customDestination" value="${escapeHtml(customValue)}" placeholder="Example: Grocery store" autocomplete="off" />
+          </label>
+          <p id="destinationError" class="error-message hidden">We could not find that address. Type at least 3 letters.</p>
+          <div class="row">
+            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next ${state.destination ? "" : "disabled"}><span class="button-emoji">➡️</span>Continue</button>
+          </div>
+        `;
+      }
+
+      function scenarioDestinations() {
+        if (state.scenario === "doctor") return ["Medical Appointment", "Horizon Medical Clinic", "Horizon Imaging Center"];
+        if (state.scenario === "grocery") return ["Green Valley Grocery", ...state.destinations.slice(0, 2)];
+        return ["Medical Appointment", ...state.destinations.slice(0, 2)];
+      }
+
+      function destinationLabel(index) {
+        return ["Medical", "Saved Place", "Recent Place"][index] || "Place";
+      }
+
+      function renderRide() {
+        const rides = [
+          ["standard", "Standard", `$${state.prices.standard}`, "Arrives in 4 min"],
+          ["assist", "Assist", `$${state.prices.assist}`, "Extra time getting in"],
+          ["xl", "XL", `$${state.prices.xl}`, "Larger vehicle"]
+        ];
+        screen.innerHTML = `
+          <h2>Choose Ride</h2>
+          <div class="stack" role="group" aria-label="Ride choices">
+            ${rides.map(([id, label, price, time]) => `
+              <button class="choice${selectedClass(state.ride, id)}" type="button" data-ride="${id}">
+                <span class="choice-icon emoji">🚗</span>
+                <span><strong>${label}</strong><small>${time}</small></span>
+                <strong>${price}</strong>
+              </button>
+            `).join("")}
+          </div>
+          <div class="row">
+            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next ${state.ride ? "" : "disabled"}><span class="button-emoji">➡️</span>Continue</button>
+          </div>
+        `;
+        if (state.prices.surge && !state.surgePopupShown) {
+          state.surgePopupShown = true;
+          window.setTimeout(() => surgeModal.classList.add("open"), 120);
+        }
+      }
+
+      function renderPayment() {
+        if (state.help === "challenge" && state.payment === "card") state.payment = "cash";
+        const choices = state.help === "challenge"
+          ? [["cash", "Pay with cash", "No saved card available", "💵"]]
+          : [
+            ["card", "Practice card", settings.cardDeclined ? "Card ending 8475 - declined" : "Card ending 8475", "💳"],
+            ["cash", "Pay with cash", "Practice option only", "💵"]
+          ];
+        screen.innerHTML = `
+          <h2>Payment Method</h2>
+          ${state.help === "challenge" ? "<p class='muted'>No saved card is available for this challenge.</p>" : ""}
+          <div class="stack">
+            ${choices.map(([id, label, detail, icon]) => `
+              <button class="choice${selectedClass(state.payment, id)}" type="button" data-payment="${id}">
+                <span class="choice-icon emoji">${icon}</span>
+                <span><strong>${label}</strong><small>${detail}</small></span>
+                <strong>${state.payment === id ? "On" : "Pick"}</strong>
+              </button>
+            `).join("")}
+          </div>
+          <p id="paymentError" class="error-message hidden">Card declined. Choose another payment method.</p>
+          <div class="row">
+            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next><span class="button-emoji">➡️</span>Continue</button>
+          </div>
+        `;
+      }
+
+      function renderConfirm() {
+        screen.innerHTML = `
+          <h2>Confirm Ride?</h2>
+          <div class="summary">
+            <div><span>Pickup</span><strong>${escapeHtml(state.pickup)}</strong></div>
+            <div><span>Destination</span><strong>${escapeHtml(state.destination)}</strong></div>
+            <div><span>Ride</span><strong>${rideLabel()} - $${state.prices[state.ride]}</strong></div>
+            <div><span>Payment</span><strong>${paymentLabel()}</strong></div>
+          </div>
+          <button class="primary${actionClass()}" type="button" data-confirm><span class="button-emoji">✅</span>Confirm Practice Ride</button>
+          <button class="secondary" type="button" data-back style="margin-top: 14px;"><span class="button-emoji">⬅️</span>Back</button>
+        `;
+      }
+
+      function renderDriverCancelled() {
+        screen.innerHTML = `
+          <h2>Driver Cancelled</h2>
+          <p class="muted">This can happen in a real ride-share app. Stay calm and request another practice ride.</p>
+          <button class="primary${actionClass()}" type="button" data-rebook><span class="button-emoji">🚘</span>Request Another Driver</button>
+          <button class="secondary" type="button" data-back style="margin-top: 14px;"><span class="button-emoji">⬅️</span>Review Ride Details</button>
+        `;
+      }
+
+      function renderWaiting() {
+        if (state.scenario === "driver-cancel" && !state.session.rebooked && state.confirmed) {
+          state.driverCancelled = true;
+          renderDriverCancelled();
+          return;
+        }
+
+        screen.innerHTML = `
+          <h2>Your Driver Is Coming</h2>
+          <p><span id="arrivalPill" class="status-pill">Arriving in 4 minutes</span></p>
+          <div class="driver-card">
+            <div class="driver-photo" aria-hidden="true">${state.driver.initials}</div>
+            <div>
+              <p><strong>${state.driver.name}</strong></p>
+              <p class="muted">${state.driver.car}</p>
+              <p class="muted">Plate: ${state.driver.plate}</p>
+            </div>
+          </div>
+          <ul class="checklist" aria-label="Safety checklist">
+            <li><span class="check">OK</span>Check driver name</li>
+            <li><span class="check">OK</span>Check car color and plate</li>
+            <li><span class="check">OK</span>Wait in a safe visible place</li>
+          </ul>
+          <button class="danger" type="button" data-cancel style="margin-top: 18px;"><span class="button-emoji">❌</span>Cancel Ride</button>
+          <p id="cancelFeeMessage" class="error-message hidden" aria-live="polite">Cancellation fee charged: $5.00</p>
+          <button id="bookAnotherButton" class="primary hidden" type="button" data-book-another style="margin-top: 14px;"><span class="button-emoji">🚘</span>Book Another Ride</button>
+          <button id="finishRideButton" class="primary hidden" type="button" data-next style="margin-top: 14px;"><span class="button-emoji">🚗</span>Get In the Car</button>
+        `;
+        startArrivalCountdown();
+      }
+
+      function renderRating() {
+        screen.innerHTML = `
+          <h2>Rate Your Ride</h2>
+          ${state.help === "guided" ? "<p class='muted'>This is practice only. No tip will be charged.</p>" : ""}
+          <div class="stars" role="group" aria-label="Ride rating">
+            ${[1, 2, 3, 4, 5].map((value) => `<button class="star-button${state.rating === value ? " selected" : ""}" type="button" data-rating="${value}" aria-label="${value} star rating">⭐</button>`).join("")}
+          </div>
+          <h3>Tip</h3>
+          <div class="tips" role="group" aria-label="Tip amount">
+            ${["No Tip", "$1", "$2", "$3"].map((value) => `<button class="tip-button${state.tip === value ? " selected" : ""}" type="button" data-tip="${value}">${value}</button>`).join("")}
+          </div>
+          <div class="row">
+            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next ${state.rating && state.tip ? "" : "disabled"}><span class="button-emoji">✅</span>Finish</button>
+          </div>
+        `;
+      }
+
+      function renderComplete() {
+        const summary = buildSummary();
+        screen.innerHTML = `
+          <h2>Practice Complete</h2>
+          <p class="muted">The patient practiced the full sequence for booking a ride in a mobile browser.</p>
+          <div class="note-list">
+            <div><span>Time</span><strong>${summary.time}</strong></div>
+            <div><span>Hints</span><strong>${state.session.hints}</strong></div>
+            <div><span>Back presses</span><strong>${state.session.backs}</strong></div>
+            <div><span>Errors</span><strong>${state.session.errors}</strong></div>
+            <div><span>Device location</span><strong>${state.session.usedLocation ? "Used" : "Not used"}</strong></div>
+            <div><span>Cancelled</span><strong>${state.session.cancellations ? "Yes" : "No"}</strong></div>
+            <div><span>Cancellation fee</span><strong>$${state.session.cancellationFee.toFixed(2)}</strong></div>
+            <div><span>Rating and tip</span><strong>${state.rating || "-"} / ${state.tip || "-"}</strong></div>
+          </div>
+          <button class="primary" type="button" data-share><span class="button-emoji">📝</span>Share Results</button>
+          <button class="secondary" type="button" data-restart style="margin-top: 14px;"><span class="button-emoji">🔁</span>Practice Again</button>
+          <p id="shareMessage" class="muted" aria-live="polite" style="margin-top: 10px;"></p>
+        `;
+      }
+
+      function startArrivalCountdown() {
+        void carIcon.offsetWidth;
+        carIcon.classList.add("arriving");
+        arrivalTick = 4;
+        const labels = [
+          "Arriving in 4 minutes",
+          "Arriving in 3 minutes",
+          "Arriving in 2 minutes",
+          "Arriving in 1 minute",
+          "Driver arrived"
+        ];
+        const pill = document.querySelector("#arrivalPill");
+        if (pill) pill.textContent = labels[0];
+        mapLabel.textContent = labels[0];
+        arrivalTimer = setInterval(() => {
+          arrivalTick -= 1;
+          const pill = document.querySelector("#arrivalPill");
+          const finish = document.querySelector("#finishRideButton");
+          if (!pill || !finish) return;
+          const status = labels[4 - arrivalTick] || "Driver arrived";
+          pill.textContent = status;
+          mapLabel.textContent = status;
+          if (arrivalTick <= 0) {
+            clearInterval(arrivalTimer);
+            pill.textContent = "Driver arrived";
+            mapLabel.textContent = "Driver arrived";
+            finish.classList.remove("hidden");
+            chime();
+          }
+        }, 6000);
+      }
+
+      function rideLabel() {
+        return { standard: "Standard", assist: "Assist", xl: "XL" }[state.ride] || "Not chosen";
+      }
+
+      function paymentLabel() {
+        return state.payment === "cash" ? "Pay with cash" : "Practice card ending 8475";
+      }
+
+      function buildSummary() {
+        const seconds = Math.round((Date.now() - state.session.start) / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const leftover = seconds % 60;
+        return {
+          time: `${minutes} min ${leftover} sec`,
+          text: `STRIVE Ride Share Results\nPatient: ${settings.patientName || "Patient"}\nMode: ${state.help}\nScenario: ${state.scenario}\nCompleted in: ${minutes} min ${leftover} sec\nHints used: ${state.session.hints}\nBack presses: ${state.session.backs}\nErrors: ${state.session.errors}\nDevice location used: ${state.session.usedLocation ? "Yes" : "No"}\nPractice cancellations: ${state.session.cancellations}\nCancellation fee: $${state.session.cancellationFee.toFixed(2)}\nDriver rebooked: ${state.session.rebooked ? "Yes" : "No"}\nRating: ${state.rating || "-"}\nTip: ${state.tip || "-"}`
+        };
+      }
+
+      function speak(text) {
+        if (!("speechSynthesis" in window) || !text) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = Number(settings.speechRate || 0.78);
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function chime() {
+        try {
+          const audio = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audio.createOscillator();
+          const gain = audio.createGain();
+          oscillator.frequency.value = 660;
+          gain.gain.value = 0.05;
+          oscillator.connect(gain);
+          gain.connect(audio.destination);
+          oscillator.start();
+          oscillator.stop(audio.currentTime + 0.18);
+        } catch (error) {
+          return;
+        }
+      }
+
+      function vibrate(ms) {
+        if ("vibrate" in navigator) navigator.vibrate(ms);
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[char]));
+      }
+
+      screen.addEventListener("click", async (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+
+        if (button.dataset.help) {
+          state.help = button.dataset.help;
+          if (state.help === "challenge" && state.payment === "card") state.payment = "cash";
+          settings.mode = state.help;
+          saveSettings();
+          render();
+          return;
+        }
+
+        if (button.dataset.hint !== undefined) {
+          state.session.hints += 1;
+          const hint = document.querySelector("#hintText");
+          if (hint) hint.classList.remove("hidden");
+          return;
+        }
+
+        if (button.hasAttribute("data-medical-destination")) {
+          medicalModal.classList.add("open");
+          return;
+        }
+
+        if (button.dataset.destination !== undefined) {
+          state.destinationChoice = button.dataset.destination;
+          state.destination = button.dataset.address;
+          render();
+          return;
+        }
+
+        if (button.dataset.ride) {
+          state.ride = button.dataset.ride;
+          render();
+          return;
+        }
+
+        if (button.dataset.payment) {
+          state.payment = button.dataset.payment;
+          render();
+          return;
+        }
+
+        if (button.dataset.rating) {
+          state.rating = Number(button.dataset.rating);
+          render();
+          return;
+        }
+
+        if (button.dataset.tip) {
+          state.tip = button.dataset.tip;
+          render();
+          return;
+        }
+
+        if (button.hasAttribute("data-back")) {
+          state.session.backs += 1;
+          setStep(state.step - 1);
+        }
+
+        if (button.hasAttribute("data-use-location")) {
+          useDeviceLocation(button);
+          return;
+        }
+
+        if (button.hasAttribute("data-next")) {
+          if (state.step === 6 && state.cancelled) {
+            showFailureModal();
+            return;
+          }
+
+          if (state.step === 4 && state.payment === "card" && settings.cardDeclined) {
+            state.session.errors += 1;
+            const error = document.querySelector("#paymentError");
+            if (error) error.classList.remove("hidden");
+            coachText.textContent = "Card declined. Choose another payment method.";
+            return;
+          }
+
+          if (state.step === 2 && state.destinationChoice === "custom" && state.destination.length < 3) {
+            state.session.errors += 1;
+            document.querySelector("#destinationError")?.classList.remove("hidden");
+            return;
+          }
+          setStep(state.step + 1);
+        }
+
+        if (button.hasAttribute("data-confirm")) {
+          state.confirmed = true;
+          setStep(6);
+        }
+
+        if (button.hasAttribute("data-rebook")) {
+          state.session.rebooked = true;
+          state.driver = drivers[(drivers.indexOf(state.driver) + 1) % drivers.length];
+          render();
+        }
+
+        if (button.hasAttribute("data-cancel")) {
+          state.cancelled = true;
+          state.session.cancellations += 1;
+          state.session.cancellationFee += 5;
+          coachText.textContent = "Ride cancelled. A simulated $5.00 cancellation fee was charged.";
+          const feeMessage = document.querySelector("#cancelFeeMessage");
+          const bookAnotherButton = document.querySelector("#bookAnotherButton");
+          if (feeMessage) feeMessage.classList.remove("hidden");
+          if (bookAnotherButton) bookAnotherButton.classList.remove("hidden");
+          button.innerHTML = '<span class="button-emoji">❌</span>Ride Cancelled';
+          button.disabled = true;
+        }
+
+        if (button.hasAttribute("data-book-another")) {
+          bookAnotherRide();
+        }
+
+        if (button.hasAttribute("data-share")) {
+          const summary = buildSummary().text;
+          try {
+            await navigator.clipboard.writeText(summary);
+            document.querySelector("#shareMessage").textContent = "Results copied for session notes.";
+          } catch (error) {
+            document.querySelector("#shareMessage").textContent = summary;
+          }
+        }
+
+        if (button.hasAttribute("data-restart")) {
+          restartSession();
+        }
+      });
+
+      document.addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+
+        if (button.dataset.medicalChoice) {
+          state.destinationChoice = "medical";
+          state.destination = button.dataset.medicalChoice;
+          medicalModal.classList.remove("open");
+          render();
+        }
+      });
+
+      screen.addEventListener("input", (event) => {
+        if (event.target.id === "pickupInput") {
+          state.pickup = event.target.value.trim() || "Current location";
+        }
+
+        if (event.target.id === "customDestination") {
+          state.destinationChoice = "custom";
+          state.destination = event.target.value.trim();
+          const nextButton = screen.querySelector("button[data-next]");
+          const error = document.querySelector("#destinationError");
+          if (nextButton) nextButton.disabled = !state.destination;
+          if (error) error.classList.add("hidden");
+        }
+
+        if (event.target.id === "modeScenarioSelect") {
+          state.scenario = event.target.value;
+          settings.scenario = state.scenario;
+          state.prices = makePrices(state.scenario);
+          saveSettings();
+        }
+      });
+
+      function restartSession() {
+        state.step = 0;
+        state.destination = "";
+        state.destinationChoice = "";
+        state.ride = "";
+        state.payment = state.help === "challenge" ? "cash" : "card";
+        state.rating = 0;
+        state.tip = "";
+        state.confirmed = false;
+        state.cancelled = false;
+        state.driverCancelled = false;
+        state.arrivalDone = false;
+        state.surgePopupShown = false;
+        state.prices = makePrices(state.scenario);
+        state.driver = drivers[Math.floor(Math.random() * drivers.length)];
+        state.session = { start: Date.now(), stepStarted: Date.now(), stepTimes: [], backs: 0, hints: 0, errors: 0, cancellations: 0, cancellationFee: 0, usedLocation: false, rebooked: false };
+        render();
+      }
+
+      function showFailureModal() {
+        state.session.errors += 1;
+        failureModal.classList.add("open");
+      }
+
+      function bookAnotherRide() {
+        failureModal.classList.remove("open");
+        clearInterval(arrivalTimer);
+        carIcon.classList.remove("arriving");
+        state.cancelled = false;
+        state.confirmed = false;
+        state.driverCancelled = false;
+        state.destination = "";
+        state.destinationChoice = "";
+        state.ride = "";
+        state.payment = state.help === "challenge" ? "cash" : "card";
+        state.rating = 0;
+        state.tip = "";
+        state.prices = makePrices(state.scenario);
+        state.driver = drivers[Math.floor(Math.random() * drivers.length)];
+        state.session.rebooked = true;
+        state.surgePopupShown = false;
+        setStep(1);
+      }
+
+      function useDeviceLocation(button) {
+        const message = document.querySelector("#locationMessage");
+        if (!("geolocation" in navigator)) {
+          state.session.errors += 1;
+          if (message) message.textContent = "This browser does not support device location.";
+          return;
+        }
+
+        button.disabled = true;
+        button.innerHTML = '<span class="button-emoji">📍</span>Finding Location...';
+        if (message) message.textContent = "Your browser may ask for permission.";
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude.toFixed(5);
+            const longitude = position.coords.longitude.toFixed(5);
+            state.pickup = `Current device location (${latitude}, ${longitude})`;
+            state.session.usedLocation = true;
+            const input = document.querySelector("#pickupInput");
+            if (input) input.value = state.pickup;
+            if (message) message.textContent = "Device location added for pickup.";
+            button.disabled = false;
+            button.innerHTML = '<span class="button-emoji">📍</span>Update Device Location';
+          },
+          (error) => {
+            state.session.errors += 1;
+            const reason = error.code === error.PERMISSION_DENIED
+              ? "Location permission was denied."
+              : "Location could not be found. You can type the pickup instead.";
+            if (message) message.textContent = reason;
+            button.disabled = false;
+            button.innerHTML = '<span class="button-emoji">📍</span>Use Device Location';
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        );
+      }
+
+      fontButton.addEventListener("click", () => {
+        settings.font = settings.font === "normal" ? "large" : settings.font === "large" ? "xl" : "normal";
+        saveSettings();
+        applySettings();
+      });
+
+      helpButton.addEventListener("click", () => {
+        document.querySelector("#patientNameInput").value = settings.patientName;
+        document.querySelector("#pickupSetupInput").value = settings.pickup || state.pickup;
+        document.querySelector("#destinationsSetupInput").value = (settings.destinations.length ? settings.destinations : state.destinations).join("\n");
+        document.querySelector("#scenarioSelect").value = state.scenario;
+        document.querySelector("#speechRateSelect").value = settings.speechRate;
+        document.querySelector("#cardDeclinedInput").checked = settings.cardDeclined;
+        therapistModal.classList.add("open");
+      });
+
+      closeSettingsButton.addEventListener("click", () => therapistModal.classList.remove("open"));
+      closeFailureButton.addEventListener("click", () => failureModal.classList.remove("open"));
+      closeMedicalButton.addEventListener("click", () => medicalModal.classList.remove("open"));
+      closeSurgeButton.addEventListener("click", () => surgeModal.classList.remove("open"));
+      closeEatsButton.addEventListener("click", () => eatsModal.classList.remove("open"));
+      settingsReadButton.addEventListener("click", () => speak(`${steps[state.step].title}. ${coachText.textContent}`));
+      distractor.addEventListener("click", () => {
+        state.session.errors += 1;
+        eatsModal.classList.add("open");
+      });
+
+      themeButton.addEventListener("click", () => {
+        settings.theme = settings.theme === "dark" ? "light" : "dark";
+        saveSettings();
+        applySettings();
+      });
+
+      saveSettingsButton.addEventListener("click", () => {
+        settings.patientName = document.querySelector("#patientNameInput").value.trim();
+        settings.pickup = document.querySelector("#pickupSetupInput").value.trim();
+        settings.destinations = document.querySelector("#destinationsSetupInput").value.split("\n").map((item) => item.trim()).filter(Boolean).slice(0, 5);
+        settings.scenario = document.querySelector("#scenarioSelect").value;
+        settings.speechRate = document.querySelector("#speechRateSelect").value;
+        settings.cardDeclined = document.querySelector("#cardDeclinedInput").checked;
+        state.pickup = settings.pickup || state.pickup;
+        state.destinations = settings.destinations.length ? settings.destinations : state.destinations;
+        state.scenario = settings.scenario;
+        state.prices = makePrices(state.scenario);
+        saveSettings();
+        therapistModal.classList.remove("open");
+        render();
+      });
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+        });
+      }
+
+      applySettings();
+      render();
+    </script>
+  </body>
+</html>
