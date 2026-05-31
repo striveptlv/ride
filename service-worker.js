@@ -1,9 +1,11 @@
-const CACHE_NAME = "strive-ride-share-v21";
+const CACHE_NAME = "strive-ride-share-v25";
 const APP_ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
   "./icon.svg",
+  "./app-icon-192.png",
+  "./app-icon-512.png",
   "./logo.png",
   "./mock-map.png",
   "./car-black.png",

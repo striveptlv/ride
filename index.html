@@ -10,6 +10,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="STRIVE Ride" />
+    <link rel="apple-touch-icon" href="./app-icon-512.png" />
+    <link rel="icon" type="image/png" href="./app-icon-192.png" />
     <link rel="manifest" href="./manifest.json" />
     <title>STRIVE Ride Share Practice</title>
     <style>
@@ -239,28 +241,59 @@
 
       .route-line {
         position: absolute;
-        left: 50%;
-        top: 54px;
-        width: 72px;
-        height: 136px;
-        border: 8px solid #1877f2;
-        border-left: 0;
-        border-bottom: 0;
-        border-radius: 0 28px 0 0;
-        background: transparent;
+        inset: 0;
+        width: 100%;
+        height: 100%;
         z-index: 3;
         filter: drop-shadow(0 2px 3px rgba(24, 119, 242, 0.24));
+        pointer-events: none;
       }
 
-      .route-line::after {
-        content: "";
-        position: absolute;
-        right: -8px;
-        bottom: -12px;
-        width: 86px;
-        height: 8px;
-        border-radius: 999px;
-        background: #1877f2;
+      .route-path {
+        fill: none;
+        stroke: #1877f2;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 100;
+        stroke-dashoffset: 0;
+        opacity: 0;
+        transition: opacity 180ms ease;
+      }
+
+      .route-one-path {
+        opacity: 1;
+      }
+
+      .map.route-two .route-one-path,
+      .map.route-three .route-one-path,
+      .map.route-four .route-one-path,
+      .map.route-five .route-one-path {
+        opacity: 0;
+      }
+
+      .map.route-one .route-one-path,
+      .map.route-two .route-two-path,
+      .map.route-three .route-three-path,
+      .map.route-four .route-four-path,
+      .map.route-five .route-five-path {
+        opacity: 1;
+      }
+
+      .map.booked .route-path {
+        stroke-dashoffset: 100;
+      }
+
+      .map.booked.route-one .route-one-path,
+      .map.booked.route-two .route-two-path,
+      .map.booked.route-three .route-three-path,
+      .map.booked.route-four .route-four-path,
+      .map.booked.route-five .route-five-path {
+        animation: route-highlight-drive 24s ease-in-out forwards;
+      }
+
+      @keyframes route-highlight-drive {
+        to { stroke-dashoffset: 0; }
       }
 
       .pin {
@@ -318,13 +351,54 @@
       }
 
       .car.arriving {
-        animation: driver-arrival 12s ease-in-out forwards;
+        animation-duration: 24s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
       }
 
-      @keyframes driver-arrival {
+      .car.route-one { animation-name: driver-arrival-one; }
+      .car.route-two { animation-name: driver-arrival-two; }
+      .car.route-three { animation-name: driver-arrival-three; }
+      .car.route-four { animation-name: driver-arrival-four; }
+      .car.route-five { animation-name: driver-arrival-five; }
+
+      @keyframes driver-arrival-one {
         0% { left: calc(50% + 62px); top: 50px; transform: rotate(90deg) scale(1); }
-        35% { left: calc(50% + 62px); top: 126px; transform: rotate(180deg) scale(1.06); }
-        70% { left: calc(50% + 8px); top: 126px; transform: rotate(270deg) scale(1); }
+        28% { left: calc(50% + 62px); top: 126px; transform: rotate(180deg) scale(1.04); }
+        58% { left: calc(50% + 8px); top: 126px; transform: rotate(270deg) scale(1); }
+        82% { left: calc(50% + 8px); top: 82px; transform: rotate(0deg) scale(1.08); }
+        100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
+      }
+
+      @keyframes driver-arrival-two {
+        0% { left: 14%; top: 192px; transform: rotate(72deg) scale(1); }
+        24% { left: 32%; top: 194px; transform: rotate(86deg) scale(1.02); }
+        48% { left: 56%; top: 174px; transform: rotate(20deg) scale(1); }
+        74% { left: calc(50% + 28px); top: 106px; transform: rotate(-18deg) scale(1.07); }
+        100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
+      }
+
+      @keyframes driver-arrival-three {
+        0% { left: 72%; top: 184px; transform: rotate(190deg) scale(1); }
+        22% { left: 72%; top: 126px; transform: rotate(180deg) scale(1.03); }
+        44% { left: 62%; top: 86px; transform: rotate(238deg) scale(1); }
+        72% { left: calc(50% + 18px); top: 64px; transform: rotate(270deg) scale(1.08); }
+        100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
+      }
+
+      @keyframes driver-arrival-four {
+        0% { left: 10%; top: 108px; transform: rotate(24deg) scale(1); }
+        25% { left: 25%; top: 88px; transform: rotate(84deg) scale(1.02); }
+        50% { left: 49%; top: 102px; transform: rotate(112deg) scale(1); }
+        78% { left: calc(50% + 18px); top: 84px; transform: rotate(320deg) scale(1.08); }
+        100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
+      }
+
+      @keyframes driver-arrival-five {
+        0% { left: 68%; top: 68px; transform: rotate(140deg) scale(1); }
+        18% { left: 76%; top: 116px; transform: rotate(180deg) scale(1.03); }
+        44% { left: 64%; top: 158px; transform: rotate(250deg) scale(1); }
+        70% { left: 48%; top: 132px; transform: rotate(304deg) scale(1.07); }
         100% { left: calc(50% - 12px); top: 72px; transform: rotate(0deg) scale(1.12); }
       }
 
@@ -392,6 +466,18 @@
         font-size: 0.86rem;
         color: var(--muted);
         font-weight: 800;
+        z-index: 8;
+      }
+
+      .map.booked .map-label {
+        top: 10px;
+        right: auto;
+        bottom: auto;
+        max-width: 180px;
+        padding: 8px 10px;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--panel) 94%, transparent);
+        font-size: 0.78rem;
       }
 
       .distractor {
@@ -946,7 +1032,13 @@
         <div class="map-label-small park">Sunset Park</div>
         <div class="map-label-small street-a">Warm Springs Rd</div>
         <div class="map-label-small street-b">Eastern Ave</div>
-        <div class="route-line"></div>
+        <svg class="route-line" viewBox="0 0 300 264" preserveAspectRatio="none" aria-hidden="true">
+          <polyline class="route-path route-one-path" pathLength="100" points="212,79 212,155 158,155 158,111 148,101"></polyline>
+          <polyline class="route-path route-two-path" pathLength="100" points="63,221 117,223 189,203 178,135 148,101"></polyline>
+          <polyline class="route-path route-three-path" pathLength="100" points="237,213 237,155 207,115 168,93 148,101"></polyline>
+          <polyline class="route-path route-four-path" pathLength="100" points="51,137 96,117 168,131 168,113 148,101"></polyline>
+          <polyline class="route-path route-five-path" pathLength="100" points="225,97 249,145 213,187 165,161 148,101"></polyline>
+        </svg>
         <div class="pin pickup"><span>A</span></div>
         <div class="pin dropoff"><span>B</span></div>
         <div class="nearby-car one" aria-hidden="true">🚙</div>
@@ -1182,6 +1274,7 @@
       let arrivalTimer = null;
       let countdown = 60;
       let arrivalTick = 4;
+      const driverRouteClasses = ["route-one", "route-two", "route-three", "route-four", "route-five"];
 
       function loadSettings() {
         try {
@@ -1243,7 +1336,8 @@
       function render() {
         clearInterval(stepTimer);
         clearInterval(arrivalTimer);
-        carIcon.classList.remove("arriving");
+        carIcon.classList.remove("arriving", ...driverRouteClasses);
+        practiceMap.classList.remove(...driverRouteClasses);
         practiceMap.classList.toggle("booked", state.confirmed || state.step >= 6);
         document.body.classList.toggle("home-screen", state.step === 0);
         const current = steps[state.step];
@@ -1541,6 +1635,11 @@
       }
 
       function startArrivalCountdown() {
+        const routeClass = driverRouteClasses[Math.floor(Math.random() * driverRouteClasses.length)];
+        carIcon.classList.remove("arriving", ...driverRouteClasses);
+        practiceMap.classList.remove(...driverRouteClasses);
+        carIcon.classList.add(routeClass);
+        practiceMap.classList.add(routeClass);
         void carIcon.offsetWidth;
         carIcon.classList.add("arriving");
         arrivalTick = 4;
