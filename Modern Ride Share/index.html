@@ -9,13 +9,13 @@
     <meta name="theme-color" content="#2f7d56" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="STRIDE Realistic" />
+    <meta name="apple-mobile-web-app-title" content="STRIVE Ride Share" />
     <link rel="apple-touch-icon" href="./app-icon-512.png" />
     <link rel="icon" type="image/png" href="./app-icon-192.png" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <title>STRIDE Realistic Ride Share Practice</title>
+    <title>STRIVE Ride Share Practice</title>
     <style>
       :root {
         color-scheme: light;
@@ -515,17 +515,20 @@
         right: 0;
         display: grid;
         gap: 6px;
+        max-height: min(246px, 42dvh);
+        overflow-y: auto;
+        overscroll-behavior: contain;
         padding: 8px;
         border: 1px solid var(--line);
         border-radius: 16px;
         background: color-mix(in srgb, var(--panel) 98%, transparent);
         box-shadow: var(--shadow);
-        z-index: 20;
+        z-index: 35;
       }
 
       .location-suggestion {
         display: grid;
-        grid-template-columns: 34px minmax(0, 1fr);
+        grid-template-columns: 42px minmax(0, 1fr);
         align-items: center;
         gap: 10px;
         width: 100%;
@@ -538,7 +541,23 @@
       }
 
       .location-suggestion span {
-        font-size: 1.5rem;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--focus) 13%, var(--panel));
+        color: var(--focus);
+        font-size: 0.72rem;
+        font-weight: 950;
+        letter-spacing: 0.03em;
+      }
+
+      .location-logo {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
 
       .location-suggestion strong,
@@ -774,11 +793,6 @@
         display: block;
       }
 
-      .mode-emoji {
-        margin-bottom: 0;
-        font-size: 2rem;
-      }
-
       .choice strong,
       .choice span {
         display: block;
@@ -803,6 +817,7 @@
         line-height: 1.2;
         white-space: normal;
         text-align: center;
+        text-decoration: none;
       }
 
       .sheet > button + button,
@@ -970,7 +985,7 @@
 
       .star-button {
         color: #8a8f8c;
-        font-size: 1.75rem;
+        font-size: 2.15rem;
       }
 
       .star-button.selected {
@@ -1533,12 +1548,27 @@
       .result-icon {
         display: grid;
         place-items: center;
-        width: 44px;
-        height: 44px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background: #f4f4f4;
-        color: #000;
-        font-size: 1.25rem;
+        background: color-mix(in srgb, var(--focus) 12%, #f4f4f4);
+        color: var(--focus);
+        font-size: 0.76rem;
+        font-weight: 950;
+        letter-spacing: 0.03em;
+      }
+
+      .result-icon .location-logo,
+      .choice-icon .location-logo,
+      .result-icon .ui-logo,
+      .payment-row .ui-logo {
+        width: 100%;
+        height: 100%;
+      }
+
+      .ui-logo {
+        display: block;
+        object-fit: contain;
       }
 
       .result-distance {
@@ -1608,11 +1638,11 @@
 
       .ride-option {
         display: grid;
-        grid-template-columns: 112px minmax(0, 1fr) auto;
+        grid-template-columns: 136px minmax(0, 1fr) auto;
         align-items: center;
         gap: 12px;
         width: 100%;
-        min-height: 98px;
+        min-height: 112px;
         padding: 12px 18px;
         border: 3px solid transparent;
         border-radius: 24px;
@@ -1626,20 +1656,28 @@
       }
 
       .ride-option.featured {
-        min-height: 150px;
+        min-height: 160px;
         grid-template-columns: 1fr auto;
         padding: 20px;
       }
 
       .ride-option.featured .vehicle-art {
         grid-row: 1 / 3;
-        width: 170px;
+        width: 190px;
       }
 
       .vehicle-art {
-        width: 104px;
-        height: 58px;
+        width: 132px;
+        height: 78px;
         background: url("./car-red.png") center / contain no-repeat;
+      }
+
+      .vehicle-art img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 16px;
       }
 
       .vehicle-art.black {
@@ -1699,6 +1737,11 @@
         font-weight: 800;
       }
 
+      .payment-row .ui-logo {
+        width: 38px;
+        height: 38px;
+      }
+
       .primary {
         min-height: 64px;
         border-radius: 999px;
@@ -1722,7 +1765,12 @@
       .location-suggestions {
         border-radius: 14px;
         border-color: #eeeeee;
+        max-height: min(224px, 38dvh);
         box-shadow: 0 12px 22px rgba(0, 0, 0, 0.12);
+      }
+
+      .home-panel .location-suggestions {
+        max-height: 210px;
       }
 
       :root {
@@ -1877,6 +1925,20 @@
         color: var(--ink);
         font-size: 1.6rem;
         line-height: 1;
+        text-decoration: none;
+      }
+
+      #navButton {
+        font-size: 0;
+      }
+
+      #navButton::before {
+        content: "";
+        width: 19px;
+        height: 2px;
+        border-radius: 999px;
+        background: currentColor;
+        box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
       }
 
       #bellButton {
@@ -2233,10 +2295,6 @@
         font-size: 0.78rem;
       }
 
-      body.home-screen .mode-emoji {
-        display: none;
-      }
-
       .mode-button,
       .choice {
         border-radius: 16px;
@@ -2501,8 +2559,33 @@
 
       .mode-strip {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-self: stretch;
+        width: 100%;
+        min-width: 0;
+        gap: 12px;
+      }
+
+      .mode-strip .mode-button {
+        display: grid;
+        width: 100%;
+        min-width: 0;
+        min-height: 58px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        align-content: center;
+        gap: 0;
+        padding: 12px 14px;
+        border-radius: 18px;
+        font-weight: 950;
+        text-align: center;
+      }
+
+      body.home-screen .mode-strip .mode-button {
+        width: 100%;
+        min-height: 58px;
+        padding: 12px 14px;
+        font-size: 1rem;
       }
 
       .app-title strong {
@@ -2511,8 +2594,8 @@
 
       .nav-tab,
       .settings-tab {
-        background: rgba(246, 248, 251, 0.72);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+        background: transparent;
+        box-shadow: none;
       }
 
       #helpButton {
@@ -2589,29 +2672,29 @@
       .ride-option,
       .ride-option.featured,
       .ride-option:not(.featured) {
-        grid-template-columns: 104px minmax(0, 1fr) auto;
-        min-height: 96px;
+        grid-template-columns: 124px minmax(0, 1fr) auto;
+        min-height: 112px;
         padding: 14px 16px;
         gap: 14px;
         align-items: center;
       }
 
       .ride-option.featured {
-        min-height: 112px;
+        min-height: 124px;
       }
 
       .ride-option.featured .vehicle-art,
       .ride-option:not(.featured) .vehicle-art,
       .vehicle-art {
         grid-row: auto;
-        width: 96px;
-        height: 62px;
+        width: 116px;
+        height: 76px;
         background: none;
       }
 
       .ride-option:not(.featured) .vehicle-art {
-        width: 84px;
-        height: 54px;
+        width: 108px;
+        height: 70px;
       }
 
       .vehicle-art svg {
@@ -2619,6 +2702,14 @@
         width: 100%;
         height: 100%;
         overflow: visible;
+      }
+
+      .vehicle-art img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 16px;
       }
 
       .vehicle-art.black {
@@ -2662,6 +2753,55 @@
       }
     </style>
   
+<script type="text/plain" data-strive-access-guard data-temporarily-disabled="true">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
+const AUTH_URL = "https://www.striveptlv.com/independence/auth.html";
+const TRIAL_ENDED_URL = "https://www.striveptlv.com/independence/trial-ended.html";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkStriveAccess() {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profile")
+    .select("has_access, access_type, trial_ends_at")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profileError || !profile) {
+    console.error("Profile fetch failed:", profileError?.message);
+    window.location.replace(AUTH_URL);
+    return;
+  }
+
+  const now = new Date();
+  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
+  const trialActive = profile.access_type === "trial" && trialEndsAt && trialEndsAt > now;
+  const paidActive = profile.access_type === "paid" && profile.has_access === true;
+  const teamActive = profile.access_type === "team" && profile.has_access === true;
+  const adminActive = profile.access_type === "admin" && profile.has_access === true;
+
+  if (!(trialActive || paidActive || teamActive || adminActive)) {
+    window.location.replace(TRIAL_ENDED_URL);
+  }
+}
+
+// Temporarily disabled while STRIVE Ride Share simulations are being tested.
+// To reactivate, change this script type back to "module" and restore the call below.
+// checkStriveAccess().catch((error) => {
+//   console.error("Access check failed:", error);
+//   window.location.replace(AUTH_URL);
+// });
+</script>
 </head>
   <body>
     <main class="app">
@@ -2670,21 +2810,21 @@
         <span class="ios-indicators"><span>▮▮▮</span><span>⌁</span><span class="battery"></span></span>
       </div>
       <header class="topbar">
-        <a class="home-link" href="../Ride%20Share/index.html" aria-label="Home">Home</a>
+        <a class="home-link" href="https://www.striveptlv.com/ride" aria-label="Home">Home</a>
         <div class="brand">
-          <img class="brand-logo" src="./logo.png" alt="STRIDE logo" />
+          <img class="brand-logo" src="./logo.png" alt="STRIVE logo" />
           <div>
-            <strong>STRIDE Realistic</strong>
-            <span>by STRIVE</span>
+            <strong>STRIVE Ride Share</strong>
+            <span>Practice simulator</span>
           </div>
         </div>
         <button id="fontButton" class="top-button" type="button" aria-label="Change font size"><span class="font-sizes" aria-hidden="true"><span>A</span><span>A</span><span>A</span><span>A</span></span></button>
-        <button id="helpButton" class="top-button" type="button" aria-label="Open therapist settings and notes">⚙️</button>
+        <button id="helpButton" class="top-button" type="button" aria-label="Open therapist settings and notes">⚙</button>
         <div class="app-title">
-          <button class="menu-button nav-tab" id="navButton" type="button" aria-label="Open navigation">☰</button>
+          <a class="menu-button nav-tab" id="navButton" href="https://www.striveptlv.com/ride" aria-label="Home">☰</a>
           <div>
-            <strong>STRIDE Realistic</strong>
-            <span>by STRIVE</span>
+            <strong>STRIVE Ride Share</strong>
+            <span>Practice simulator</span>
           </div>
           <button class="menu-button settings-tab" id="settingsButton" type="button" aria-label="Open settings">⚙</button>
         </div>
@@ -2699,7 +2839,7 @@
         <div class="map-block two"></div>
         <div class="map-block three"></div>
         <div class="map-block four park"></div>
-        <div class="map-label-small clinic">STRIDE PT</div>
+        <div class="map-label-small clinic">STRIVE PT</div>
         <div class="map-label-small park">Sunset Park</div>
         <div class="map-label-small street-a">Warm Springs Rd</div>
         <div class="map-label-small street-b">Eastern Ave</div>
@@ -2712,11 +2852,11 @@
         </svg>
         <div class="pin pickup"><span>A</span></div>
         <div class="pin dropoff"><span>B</span></div>
-        <div class="nearby-car one" aria-hidden="true">🚙</div>
-        <div class="nearby-car two" aria-hidden="true">🚗</div>
-        <div class="nearby-car three" aria-hidden="true">🚘</div>
-        <div class="nearby-car four" aria-hidden="true">🚕</div>
-        <div id="carIcon" class="car" aria-hidden="true">🚗</div>
+        <div class="nearby-car one" aria-hidden="true">car</div>
+        <div class="nearby-car two" aria-hidden="true">car</div>
+        <div class="nearby-car three" aria-hidden="true">car</div>
+        <div class="nearby-car four" aria-hidden="true">car</div>
+        <div id="carIcon" class="car" aria-hidden="true">car</div>
         <div class="map-callout pickup-card">
           <small>Pickup</small>
           <strong>STRIVE Physical Therapy</strong>
@@ -2731,7 +2871,7 @@
       </section>
 
       <button id="distractor" class="distractor" type="button">
-        🍽️ STRIDE Eats: Free delivery today
+        STRIVE Eats: Free delivery today
       </button>
 
       <section class="coach" aria-live="polite">
@@ -2744,7 +2884,7 @@
       </section>
 
       <p class="footer-note">
-        STRIDE Ride Share by STRIVE Physical Therapy - Las Vegas · Training simulator only. No location, payment, message, phone call, or ride request is sent.
+        STRIVE Ride Share by STRIVE Physical Therapy - Las Vegas · Training simulator only. No location, payment, message, phone call, or ride request is sent.
       </p>
     </main>
 
@@ -2781,12 +2921,12 @@
               <option value="0.92">Normal</option>
             </select>
           </label>
-          <button id="settingsReadButton" class="secondary" type="button"><span class="button-emoji">🔊</span>Read Current Step</button>
+          <button id="settingsReadButton" class="secondary" type="button">Read Current Step</button>
           <label class="check-setting">
             <input id="cardDeclinedInput" type="checkbox" />
             <span>Practice card will be declined</span>
           </label>
-          <button id="themeButton" class="secondary" type="button"><span class="button-emoji">🌙</span>Toggle Day or Night</button>
+          <button id="themeButton" class="secondary hidden" type="button" aria-hidden="true" tabindex="-1">Toggle Day or Night</button>
           <div class="therapist-note">
             <strong>Clinical notes:</strong> Pickup checks train orientation and error monitoring.
             Destination entry trains visual scanning and problem solving. Ride selection trains
@@ -2798,22 +2938,10 @@
             you confirm?" "What information tells you this is the correct car?"
           </div>
           <div class="row">
-            <button id="saveSettingsButton" class="primary" type="button"><span class="button-emoji">✅</span>Save Setup</button>
-            <button id="closeSettingsButton" class="secondary" type="button"><span class="button-emoji">↩️</span>Close</button>
+            <button id="saveSettingsButton" class="primary" type="button">Save Setup</button>
+            <button id="closeSettingsButton" class="secondary" type="button">Close</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div id="navModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="navTitle">
-      <div class="modal">
-        <h2 id="navTitle">STRIDE Ride Share</h2>
-        <div class="nav-list">
-          <button type="button" data-nav-home><span class="result-icon" aria-hidden="true">⌂</span><span>Home</span><span class="chevron" aria-hidden="true">›</span></button>
-          <button type="button" data-nav-reset><span class="result-icon" aria-hidden="true">↻</span><span>Restart practice</span><span class="chevron" aria-hidden="true">›</span></button>
-          <button type="button" data-nav-settings><span class="result-icon" aria-hidden="true">⚙</span><span>Settings and notes</span><span class="chevron" aria-hidden="true">›</span></button>
-        </div>
-        <button id="closeNavButton" class="secondary" type="button" style="margin-top: 14px;">Close</button>
       </div>
     </div>
 
@@ -2823,8 +2951,8 @@
         <p class="muted">
           The ride was cancelled, so the rider cannot get in the car. Book another ride and try again.
         </p>
-        <button class="primary" type="button" data-book-another><span class="button-emoji">🚘</span>Book Another Ride</button>
-        <button id="closeFailureButton" class="secondary" type="button" style="margin-top: 14px;"><span class="button-emoji">↩️</span>Close</button>
+        <button class="primary" type="button" data-book-another>Book Another Ride</button>
+        <button id="closeFailureButton" class="secondary" type="button" style="margin-top: 14px;">Close</button>
       </div>
     </div>
 
@@ -2834,22 +2962,22 @@
         <p class="muted">Several locations look similar. Pick the correct practice destination.</p>
         <div class="stack">
           <button class="choice" type="button" data-medical-choice="Horizon Medical Clinic">
-            <span class="choice-icon emoji">🏥</span>
+            <span class="choice-icon emoji"><img class="location-logo" src="./location-medical.svg" alt="" /></span>
             <span><strong>Horizon Medical Clinic</strong><small>Primary care appointment</small></span>
             <strong>Pick</strong>
           </button>
           <button class="choice" type="button" data-medical-choice="Horizon Imaging Center">
-            <span class="choice-icon emoji">🏥</span>
+            <span class="choice-icon emoji"><img class="location-logo" src="./location-medical.svg" alt="" /></span>
             <span><strong>Horizon Imaging Center</strong><small>X-ray and scans</small></span>
             <strong>Pick</strong>
           </button>
           <button class="choice" type="button" data-medical-choice="Horizon Rehab Clinic">
-            <span class="choice-icon emoji">🏥</span>
+            <span class="choice-icon emoji"><img class="location-logo" src="./location-medical.svg" alt="" /></span>
             <span><strong>Horizon Rehab Clinic</strong><small>Therapy follow-up</small></span>
             <strong>Pick</strong>
           </button>
         </div>
-        <button id="closeMedicalButton" class="secondary" type="button" style="margin-top: 14px;"><span class="button-emoji">↩️</span>Close</button>
+        <button id="closeMedicalButton" class="secondary" type="button" style="margin-top: 14px;">Close</button>
       </div>
     </div>
 
@@ -2859,7 +2987,7 @@
         <p class="muted">
           Surge pricing is active because fewer cars are nearby. Review the price before choosing a ride.
         </p>
-        <button id="closeSurgeButton" class="primary" type="button"><span class="button-emoji">✅</span>Review Prices</button>
+        <button id="closeSurgeButton" class="primary" type="button">Review Prices</button>
       </div>
     </div>
 
@@ -2867,9 +2995,9 @@
       <div class="modal">
         <h2 id="eatsTitle">Wrong App</h2>
         <p class="muted">
-          STRIDE Eats is a food delivery ad. This simulation is for booking a ride. Close this and return to the ride task.
+          STRIVE Eats is a food delivery ad. This simulation is for booking a ride. Close this and return to the ride task.
         </p>
-        <button id="closeEatsButton" class="primary" type="button"><span class="button-emoji">↩️</span>Back to Ride</button>
+        <button id="closeEatsButton" class="primary" type="button">Back to Ride</button>
       </div>
     </div>
 
@@ -2881,16 +3009,13 @@
       const mapLabel = document.querySelector("#mapLabel");
       const fontButton = document.querySelector("#fontButton");
       const helpButton = document.querySelector("#helpButton");
-      const navButton = document.querySelector("#navButton");
       const settingsButton = document.querySelector("#settingsButton");
       const therapistModal = document.querySelector("#therapistModal");
-      const navModal = document.querySelector("#navModal");
       const failureModal = document.querySelector("#failureModal");
       const medicalModal = document.querySelector("#medicalModal");
       const surgeModal = document.querySelector("#surgeModal");
       const eatsModal = document.querySelector("#eatsModal");
       const closeSettingsButton = document.querySelector("#closeSettingsButton");
-      const closeNavButton = document.querySelector("#closeNavButton");
       const saveSettingsButton = document.querySelector("#saveSettingsButton");
       const closeFailureButton = document.querySelector("#closeFailureButton");
       const closeMedicalButton = document.querySelector("#closeMedicalButton");
@@ -2994,8 +3119,8 @@
           return {
             mode: ["guided", "realistic"].includes(saved.mode) ? saved.mode : "realistic",
             font: saved.font || "normal",
-            theme: saved.theme || "light",
-            patientName: saved.patientName || "",
+            theme: "light",
+            patientName: saved.patientName || "Jordan",
             pickup: saved.pickup || "",
             destinations: Array.isArray(saved.destinations) ? saved.destinations.slice(0, 5) : [],
             scenario: saved.scenario || "default",
@@ -3004,7 +3129,7 @@
             requiredCardNumber: ""
           };
         } catch (error) {
-          return { mode: "realistic", font: "normal", theme: "light", patientName: "", pickup: "", destinations: [], scenario: "default", speechRate: "0.78", cardDeclined: false, requiredCardNumber: "" };
+          return { mode: "realistic", font: "normal", theme: "light", patientName: "Jordan", pickup: "", destinations: [], scenario: "default", speechRate: "0.78", cardDeclined: false, requiredCardNumber: "" };
         }
       }
 
@@ -3012,10 +3137,15 @@
         localStorage.setItem(storageKey, JSON.stringify(settings));
       }
 
+      function patientDisplayName() {
+        return settings.patientName && settings.patientName.trim() ? settings.patientName.trim() : "Jordan";
+      }
+
       function applySettings() {
+        settings.theme = "light";
         document.body.classList.toggle("font-large", settings.font === "large");
         document.body.classList.toggle("font-xl", settings.font === "xl");
-        document.body.classList.toggle("dark", settings.theme === "dark");
+        document.body.classList.remove("dark");
       }
 
       function makePrices(scenario) {
@@ -3111,33 +3241,10 @@
         return "card";
       }
 
-      function vehicleSvg(kind) {
-        const paint = kind === "black" ? "#2d2429" : "#e9472b";
-        const glass = kind === "black" ? "#5d5358" : "#8b1821";
+      function vehicleImage(src, label) {
         return `
           <span class="vehicle-art" aria-hidden="true">
-            <svg viewBox="0 0 180 110" role="img">
-              <defs>
-                <linearGradient id="carBody${kind}" x1="0" x2="1">
-                  <stop offset="0" stop-color="#f7f7f7"/>
-                  <stop offset="0.34" stop-color="${paint}"/>
-                  <stop offset="1" stop-color="#ffffff"/>
-                </linearGradient>
-                <linearGradient id="carGlass${kind}" x1="0" x2="1">
-                  <stop offset="0" stop-color="${glass}"/>
-                  <stop offset="1" stop-color="#ff8a00"/>
-                </linearGradient>
-              </defs>
-              <ellipse cx="92" cy="95" rx="70" ry="8" fill="rgba(11,36,84,.16)"/>
-              <path d="M24 66c7-26 28-42 62-42h28c18 0 33 12 42 34l12 5v19H13V71l11-5Z" fill="url(#carBody${kind})"/>
-              <path d="M52 52c8-13 19-20 34-20h25c11 0 20 7 27 20H52Z" fill="url(#carGlass${kind})"/>
-              <path d="M44 57h30l-7-19c-10 2-18 8-23 19Zm43 0h55c-7-15-17-22-30-22H92l-5 22Z" fill="rgba(255,255,255,.38)"/>
-              <path d="M112 68c17 0 31 4 42 11H99c2-7 6-11 13-11Z" fill="rgba(255,255,255,.82)"/>
-              <circle cx="42" cy="84" r="16" fill="#2d2a2f"/>
-              <circle cx="42" cy="84" r="8" fill="#d8d8d8"/>
-              <circle cx="139" cy="84" r="16" fill="#2d2a2f"/>
-              <circle cx="139" cy="84" r="8" fill="#d8d8d8"/>
-            </svg>
+            <img src="${src}" alt="${label} ride vehicle" loading="lazy" />
           </span>
         `;
       }
@@ -3157,6 +3264,16 @@
             </button>
           </div>
         `;
+      }
+
+      function locationLogo(place) {
+        const value = String(place || "").toLowerCase();
+        if (value.includes("medical") || value.includes("clinic") || value.includes("hospital") || value.includes("doctor") || value.includes("imaging") || value.includes("rehab")) return '<img class="location-logo" src="./location-medical.svg" alt="">';
+        if (value.includes("pharmacy")) return '<img class="location-logo" src="./location-pharmacy.svg" alt="">';
+        if (value.includes("grocery") || value.includes("market")) return '<img class="location-logo" src="./location-grocery.svg" alt="">';
+        if (value.includes("home") || value.includes("court") || value.includes("street") || value.includes("st ") || value.includes("avenue") || value.includes("ave")) return '<img class="location-logo" src="./location-home.svg" alt="">';
+        if (value.includes("strive")) return '<img class="location-logo" src="./location-pt.svg" alt="">';
+        return "📍";
       }
 
       function homeRouteRows() {
@@ -3209,7 +3326,7 @@
               <div class="preset-grid" role="group" aria-label="Preset destinations">
                 ${options.map((address, index) => `
                   <button class="preset-button${selectedClass(state.destinationChoice, String(index))}" type="button" data-destination="${index}" data-address="${escapeHtml(address)}" ${address === "Medical Appointment" ? "data-medical-destination" : ""}>
-                    <span class="result-icon" aria-hidden="true">⌖</span>
+                    <span class="result-icon" aria-hidden="true">${locationLogo(address)}</span>
                     <span><strong>${escapeHtml(address)}</strong><small>${destinationLabel(index)}</small></span>
                     <span class="chevron" aria-hidden="true">›</span>
                   </button>
@@ -3235,7 +3352,7 @@
           <div class="home-shell">
             <div class="home-hero">
               <div>
-                <h2>Plan your ride</h2>
+                <h2>Welcome, ${escapeHtml(patientDisplayName())}</h2>
                 <p>Choose pickup and destination on one practice screen.</p>
               </div>
             </div>
@@ -3247,12 +3364,10 @@
             </div>
             <div class="mode-strip" role="group" aria-label="Practice mode">
               <button class="mode-button${selectedClass(state.help, "guided")}" type="button" data-help="guided">
-                <span class="mode-emoji">🧭</span>
                 <span>Guided</span>
               </button>
               <button class="mode-button${selectedClass(state.help, "realistic")}" type="button" data-help="realistic">
-                <span class="mode-emoji">📱</span>
-                <span>Realistic</span>
+                <span>Practice</span>
               </button>
             </div>
           </div>
@@ -3318,7 +3433,7 @@
             <div class="result-list" role="group" aria-label="Destination choices">
               ${options.map((address, index) => `
                 <button class="result-item${selectedClass(state.destinationChoice, String(index))}" type="button" data-destination="${index}" data-address="${escapeHtml(address)}" ${address === "Medical Appointment" ? "data-medical-destination" : ""}>
-                  <span><span class="result-icon" aria-hidden="true">⌖</span><span class="result-distance">24 mi</span></span>
+                  <span><span class="result-icon" aria-hidden="true">${locationLogo(address)}</span><span class="result-distance">24 mi</span></span>
                   <span><span class="result-title">${escapeHtml(address)}</span><span class="result-detail">${destinationLabel(index)} destination</span></span>
                 </button>
               `).join("")}
@@ -3344,18 +3459,18 @@
 
       function renderRide() {
         const rides = [
-          ["standard", "Standard", `$${state.prices.standard}`, "in 12 min", "4"],
-          ["assist", "Assist", `$${state.prices.assist}`, "Extra time getting in", "1"],
-          ["xl", "XL", `$${state.prices.xl}`, "in 6 min", "6"]
+          ["standard", "Basic", `$${state.prices.standard}`, "in 12 min", "4", "./ride-basic.png"],
+          ["assist", "Premium", `$${state.prices.assist}`, "in 8 min", "4", "./ride-premium.png"],
+          ["xl", "XL", `$${state.prices.xl}`, "in 6 min", "6", "./ride-xl.png"]
         ];
         screen.innerHTML = `
           <div class="ride-sheet">
             <div class="grabber"></div>
             <div class="points"><strong>5x total points</strong>with practice card rewards</div>
             <div class="ride-options" role="group" aria-label="Ride choices">
-              ${rides.map(([id, label, price, time, seats], index) => `
+              ${rides.map(([id, label, price, time, seats, image], index) => `
                 <button class="ride-option${selectedClass(state.ride, id)}${index === 0 ? " featured" : ""}" type="button" data-ride="${id}">
-                  ${vehicleSvg(id === "assist" ? "black" : "red")}
+                  ${vehicleImage(image, label)}
                   <span>
                     <span class="ride-name">${label} <small class="seat-count" aria-label="${seats} seats">${seats}</small></span>
                     <span class="ride-meta">${time}</span>
@@ -3366,7 +3481,7 @@
               `).join("")}
             </div>
             <div class="checkout-bar">
-              <div class="payment-row"><span class="row-pin" aria-hidden="true"></span><span>Practice card 8475</span></div>
+              <div class="payment-row"><img class="ui-logo" src="./icon-card.svg" alt="" aria-hidden="true" /><span>Practice card 8475</span></div>
               <button class="primary${actionClass()}" type="button" data-next ${state.ride ? "" : "disabled"}>Select ${state.ride ? rideLabel() : "Ride"} <span aria-hidden="true">→</span></button>
               <button class="secondary" type="button" data-back style="margin-top: 12px;">Back</button>
             </div>
@@ -3380,8 +3495,8 @@
 
       function renderPayment() {
         const choices = [
-          ["card", "Practice card", settings.cardDeclined ? "Card ending 8475 - declined" : "Card ending 8475", "💳"],
-          ["cash", "Pay with cash", "Practice option only", "💵"]
+          ["card", "Practice card", settings.cardDeclined ? "Card ending 8475 - declined" : "Card ending 8475", "./icon-card.svg"],
+          ["cash", "Pay with cash", "Practice option only", "./icon-cash.svg"]
         ];
         screen.innerHTML = `
           <div class="task-sheet">
@@ -3395,7 +3510,7 @@
             <div class="task-list">
               ${choices.map(([id, label, detail, icon]) => `
                 <button class="task-row${selectedClass(state.payment, id)}" type="button" data-payment="${id}">
-                  <span class="result-icon" aria-hidden="true">${icon}</span>
+                  <span class="result-icon" aria-hidden="true"><img class="ui-logo" src="${icon}" alt="" /></span>
                   <span><small>${escapeHtml(detail)}</small><strong>${escapeHtml(label)}</strong></span>
                   <span class="chevron" aria-hidden="true">${state.payment === id ? "✓" : "›"}</span>
                 </button>
@@ -3432,12 +3547,12 @@
                 <span></span>
               </div>
               <div class="task-row">
-                <span class="result-icon" aria-hidden="true">🚗</span>
+                <span class="result-icon" aria-hidden="true"><img class="ui-logo" src="./icon-ride.svg" alt="" /></span>
                 <span><small>Ride</small><strong>${rideLabel()} - $${state.prices[state.ride]}</strong></span>
                 <span></span>
               </div>
               <div class="task-row">
-                <span class="result-icon" aria-hidden="true">▣</span>
+                <span class="result-icon" aria-hidden="true"><img class="ui-logo" src="${state.payment === "cash" ? "./icon-cash.svg" : "./icon-card.svg"}" alt="" /></span>
                 <span><small>Payment</small><strong>${paymentLabel()}</strong></span>
                 <span></span>
               </div>
@@ -3452,8 +3567,8 @@
         screen.innerHTML = `
           <h2>Driver Cancelled</h2>
           <p class="muted">This can happen in a real ride-share app. Stay calm and request another practice ride.</p>
-          <button class="primary${actionClass()}" type="button" data-rebook><span class="button-emoji">🚘</span>Request Another Driver</button>
-          <button class="secondary" type="button" data-back style="margin-top: 14px;"><span class="button-emoji">⬅️</span>Review Ride Details</button>
+          <button class="primary${actionClass()}" type="button" data-rebook>Request Another Driver</button>
+          <button class="secondary" type="button" data-back style="margin-top: 14px;">Review Ride Details</button>
         `;
       }
 
@@ -3480,10 +3595,10 @@
             <li><span class="check">OK</span>Check car color and plate</li>
             <li><span class="check">OK</span>Wait in a safe visible place</li>
           </ul>
-          <button class="danger" type="button" data-cancel style="margin-top: 18px;"><span class="button-emoji">❌</span>Cancel Ride</button>
+          <button class="danger" type="button" data-cancel style="margin-top: 18px;">Cancel Ride</button>
           <p id="cancelFeeMessage" class="error-message hidden" aria-live="polite">Cancellation fee charged: $5.00</p>
-          <button id="bookAnotherButton" class="primary hidden" type="button" data-book-another style="margin-top: 14px;"><span class="button-emoji">🚘</span>Book Another Ride</button>
-          <button id="finishRideButton" class="primary hidden" type="button" data-next style="margin-top: 14px;"><span class="button-emoji">🚗</span>Confirm I Am in the Vehicle</button>
+          <button id="bookAnotherButton" class="primary hidden" type="button" data-book-another style="margin-top: 14px;">Book Another Ride</button>
+          <button id="finishRideButton" class="primary hidden" type="button" data-next style="margin-top: 14px;">Confirm I Am in the Vehicle</button>
         `;
         startArrivalCountdown();
       }
@@ -3500,8 +3615,8 @@
             ${["No Tip", "$1", "$2", "$3"].map((value) => `<button class="tip-button${state.tip === value ? " selected" : ""}" type="button" data-tip="${value}">${value}</button>`).join("")}
           </div>
           <div class="row">
-            <button class="secondary" type="button" data-back><span class="button-emoji">⬅️</span>Back</button>
-            <button class="primary${actionClass()}" type="button" data-next ${state.rating && state.tip ? "" : "disabled"}><span class="button-emoji">✅</span>Finish</button>
+            <button class="secondary" type="button" data-back>Back</button>
+            <button class="primary${actionClass()}" type="button" data-next ${state.rating && state.tip ? "" : "disabled"}>Finish</button>
           </div>
         `;
       }
@@ -3521,8 +3636,9 @@
             <div><span>Cancellation fee</span><strong>$${state.session.cancellationFee.toFixed(2)}</strong></div>
             <div><span>Rating and tip</span><strong>${state.rating || "-"} / ${state.tip || "-"}</strong></div>
           </div>
-          <button class="primary" type="button" data-share><span class="button-emoji">📝</span>Share Results</button>
-          <button class="secondary" type="button" data-restart style="margin-top: 14px;"><span class="button-emoji">🔁</span>Practice Again</button>
+          <button class="primary" type="button" data-share>Share Results</button>
+          <button class="secondary" type="button" data-restart style="margin-top: 14px;">Practice Again</button>
+          <a class="secondary" href="https://www.striveptlv.com/ride" style="margin-top: 14px;">Return Home</a>
           <p id="shareMessage" class="muted" aria-live="polite" style="margin-top: 10px;"></p>
         `;
       }
@@ -3565,11 +3681,15 @@
       }
 
       function rideLabel() {
-        return { standard: "Standard", assist: "Assist", xl: "XL" }[state.ride] || "Not chosen";
+        return { standard: "Basic", assist: "Premium", xl: "XL" }[state.ride] || "Not chosen";
       }
 
       function paymentLabel() {
         return state.payment === "cash" ? "Pay with cash" : "Practice card ending 8475";
+      }
+
+      function modeLabel() {
+        return state.help === "guided" ? "Guided" : "Practice";
       }
 
       function buildSummary() {
@@ -3578,7 +3698,7 @@
         const leftover = seconds % 60;
         return {
           time: `${minutes} min ${leftover} sec`,
-          text: `STRIDE Ride Share Results\nPatient: ${settings.patientName || "Patient"}\nMode: ${state.help}\nScenario: ${state.scenario}\nCompleted in: ${minutes} min ${leftover} sec\nHints used: ${state.session.hints}\nBack presses: ${state.session.backs}\nErrors: ${state.session.errors}\nDevice location used: ${state.session.usedLocation ? "Yes" : "No"}\nPractice cancellations: ${state.session.cancellations}\nCancellation fee: $${state.session.cancellationFee.toFixed(2)}\nDriver rebooked: ${state.session.rebooked ? "Yes" : "No"}\nRating: ${state.rating || "-"}\nTip: ${state.tip || "-"}`
+          text: `STRIVE Ride Share Results\nPatient: ${patientDisplayName()}\nMode: ${modeLabel()}\nScenario: ${state.scenario}\nCompleted in: ${minutes} min ${leftover} sec\nHints used: ${state.session.hints}\nBack presses: ${state.session.backs}\nErrors: ${state.session.errors}\nDevice location used: ${state.session.usedLocation ? "Yes" : "No"}\nPractice cancellations: ${state.session.cancellations}\nCancellation fee: $${state.session.cancellationFee.toFixed(2)}\nDriver rebooked: ${state.session.rebooked ? "Yes" : "No"}\nRating: ${state.rating || "-"}\nTip: ${state.tip || "-"}`
         };
       }
 
@@ -3765,7 +3885,7 @@
           const bookAnotherButton = document.querySelector("#bookAnotherButton");
           if (feeMessage) feeMessage.classList.remove("hidden");
           if (bookAnotherButton) bookAnotherButton.classList.remove("hidden");
-          button.innerHTML = '<span class="button-emoji">❌</span>Ride Cancelled';
+          button.textContent = "Ride Cancelled";
           button.disabled = true;
         }
 
@@ -3791,24 +3911,6 @@
       document.addEventListener("click", (event) => {
         const button = event.target.closest("button");
         if (!button) return;
-
-        if (button.hasAttribute("data-nav-home")) {
-          navModal.classList.remove("open");
-          setStep(0);
-          return;
-        }
-
-        if (button.hasAttribute("data-nav-reset")) {
-          navModal.classList.remove("open");
-          restartSession();
-          return;
-        }
-
-        if (button.hasAttribute("data-nav-settings")) {
-          navModal.classList.remove("open");
-          openSettings();
-          return;
-        }
 
         if (button.dataset.medicalChoice) {
           state.destinationChoice = "medical";
@@ -3872,7 +3974,7 @@
       function fetchLocationSuggestions(type, query) {
         const box = document.querySelector(type === "pickup" ? "#pickupSuggestions" : "#destinationSuggestions");
         if (!box) return;
-        box.innerHTML = `<button class="location-suggestion" type="button" disabled><span>🔎</span><strong>Searching...</strong></button>`;
+        box.innerHTML = `<button class="location-suggestion" type="button" disabled><span>📍</span><strong>Searching...</strong></button>`;
         box.classList.remove("hidden");
         const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&addressdetails=1&countrycodes=us`;
         fetch(url, { headers: { "Accept-Language": "en" } })
@@ -3939,7 +4041,7 @@
           const detail = parts.slice(1, 3).join(",").trim() || item.display_name || "";
           return `
             <button class="location-suggestion" type="button" data-location-suggestion="${type}" data-name="${escapeHtml(item.display_name || name)}" data-lat="${escapeHtml(item.lat)}" data-lon="${escapeHtml(item.lon)}">
-              <span>📍</span>
+              <span>${locationLogo(name || detail)}</span>
               <span><strong>${escapeHtml(name)}</strong><small>${escapeHtml(detail)}</small></span>
             </button>
           `;
@@ -4150,7 +4252,7 @@
         }
 
         button.disabled = true;
-        button.innerHTML = '<span class="button-emoji">📍</span>Finding Location...';
+        button.textContent = "Finding Location...";
         if (message) message.textContent = "Your browser may ask for permission.";
 
         navigator.geolocation.getCurrentPosition(
@@ -4166,7 +4268,7 @@
             reverseGeocodePickup(state.pickupCoords, input, message);
             updateLiveMap();
             button.disabled = false;
-            button.innerHTML = '<span class="button-emoji">📍</span>Update Device Location';
+            button.textContent = "Update Device Location";
           },
           (error) => {
             state.session.errors += 1;
@@ -4175,7 +4277,7 @@
               : "Location could not be found. You can type the pickup instead.";
             if (message) message.textContent = reason;
             button.disabled = false;
-            button.innerHTML = '<span class="button-emoji">📍</span>Use Device Location';
+            button.textContent = "Use Device Location";
           },
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
         );
@@ -4252,10 +4354,8 @@
 
       helpButton.addEventListener("click", openSettings);
       settingsButton.addEventListener("click", openSettings);
-      navButton.addEventListener("click", () => navModal.classList.add("open"));
 
       closeSettingsButton.addEventListener("click", () => therapistModal.classList.remove("open"));
-      closeNavButton.addEventListener("click", () => navModal.classList.remove("open"));
       closeFailureButton.addEventListener("click", () => failureModal.classList.remove("open"));
       closeMedicalButton.addEventListener("click", () => medicalModal.classList.remove("open"));
       closeSurgeButton.addEventListener("click", () => surgeModal.classList.remove("open"));
@@ -4267,7 +4367,7 @@
       });
 
       themeButton.addEventListener("click", () => {
-        settings.theme = settings.theme === "dark" ? "light" : "dark";
+        settings.theme = "light";
         saveSettings();
         applySettings();
       });

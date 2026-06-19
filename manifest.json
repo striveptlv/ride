@@ -1,7 +1,7 @@
 {
-  "name": "STRIDE Ride Share Practice",
-  "short_name": "STRIDE",
-  "description": "Ride-share booking simulators by STRIVE with basic and realistic practice options.",
+  "name": "STRIVE Ride Share",
+  "short_name": "STRIVE Ride",
+  "description": "Ride-share booking simulators by STRIVE with simple and modern practice options.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

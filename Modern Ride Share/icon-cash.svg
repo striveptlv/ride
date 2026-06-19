@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Cash payment">
+  <rect width="48" height="48" rx="14" fill="#fff4df"/>
+  <rect x="10" y="16" width="28" height="18" rx="4" fill="#ffffff" stroke="#b45a00" stroke-width="2.5"/>
+  <circle cx="24" cy="25" r="5" fill="#ffe1a8" stroke="#b45a00" stroke-width="2.2"/>
+  <path d="M15 21h3M30 29h3" stroke="#b45a00" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

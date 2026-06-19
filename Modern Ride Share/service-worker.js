@@ -1,4 +1,4 @@
-const CACHE_NAME = "stride-realistic-ride-share-v1";
+const CACHE_NAME = "strive-ride-share-modern-v11";
 const APP_ASSETS = [
   "./",
   "./index.html",
@@ -9,7 +9,18 @@ const APP_ASSETS = [
   "./logo.png",
   "./mock-map.png",
   "./car-black.png",
-  "./car-red.png"
+  "./car-red.png",
+  "./ride-basic.png",
+  "./ride-premium.png",
+  "./ride-xl.png",
+  "./location-medical.svg",
+  "./location-pharmacy.svg",
+  "./location-grocery.svg",
+  "./location-home.svg",
+  "./location-pt.svg",
+  "./icon-ride.svg",
+  "./icon-card.svg",
+  "./icon-cash.svg"
 ];
 
 self.addEventListener("install", (event) => {

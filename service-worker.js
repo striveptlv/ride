@@ -1,4 +1,4 @@
-const CACHE_NAME = "stride-basic-ride-share-v1";
+const CACHE_NAME = "strive-ride-share-v2";
 const APP_ASSETS = [
   "./",
   "./index.html",

@@ -6,11 +6,11 @@
     <meta name="theme-color" content="#082f63" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="STRIDE" />
+    <meta name="apple-mobile-web-app-title" content="STRIVE Ride Share" />
     <link rel="apple-touch-icon" href="./app-icon-512.png" />
     <link rel="icon" type="image/png" href="./app-icon-192.png" />
     <link rel="manifest" href="./manifest.json" />
-    <title>STRIDE Ride Share Practice</title>
+    <title>STRIVE Ride Share Practice</title>
     <style>
       :root {
         --navy: #082f63;
@@ -52,7 +52,7 @@
 
       .brand {
         display: grid;
-        grid-template-columns: 66px minmax(0, 1fr);
+        grid-template-columns: 66px minmax(0, 1fr) auto;
         gap: 14px;
         align-items: center;
         margin-bottom: 18px;
@@ -88,6 +88,20 @@
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 0.1em;
+      }
+
+      .settings-button {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        color: var(--navy);
+        font-size: 1.45rem;
+        font-weight: 900;
+        cursor: pointer;
       }
 
       .intro {
@@ -154,6 +168,106 @@
         font-size: 0.82rem;
         line-height: 1.4;
       }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        align-items: flex-end;
+        padding: 16px;
+        background: rgba(3, 20, 40, 0.46);
+      }
+
+      .modal-backdrop.open {
+        display: flex;
+      }
+
+      .modal {
+        width: min(100%, 560px);
+        max-height: 88dvh;
+        margin: 0 auto;
+        overflow: auto;
+        padding: 18px;
+        border-radius: 22px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .modal h2 {
+        margin: 0 0 14px;
+        color: var(--navy-deep);
+      }
+
+      .settings-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        min-height: 46px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .check-setting {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 14px;
+        background: #edf3f8;
+        font-weight: 800;
+      }
+
+      .check-setting input {
+        width: 24px;
+        min-height: 24px;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .actions button {
+        min-height: 48px;
+        border: 0;
+        border-radius: 14px;
+        font: inherit;
+        font-weight: 900;
+        cursor: pointer;
+      }
+
+      .primary-action {
+        background: linear-gradient(135deg, var(--navy), var(--navy-deep));
+        color: white;
+      }
+
+      .secondary-action {
+        background: #edf3f8;
+        color: var(--ink);
+      }
     </style>
 
 <script type="text/plain" data-strive-access-guard data-temporarily-disabled="true">
@@ -198,7 +312,7 @@ async function checkStriveAccess() {
   }
 }
 
-// Temporarily disabled while the STRIDE chooser is being tested.
+// Temporarily disabled while the STRIVE Ride Share chooser is being tested.
 // To reactivate, change this script type back to "module" and restore the call below.
 // checkStriveAccess().catch((error) => {
 //   console.error("Access check failed:", error);
@@ -208,22 +322,23 @@ async function checkStriveAccess() {
   </head>
   <body>
     <main class="shell">
-      <section class="brand" aria-label="STRIDE Ride Share">
+      <section class="brand" aria-label="STRIVE Ride Share">
         <img src="./logo.png" alt="STRIVE logo" />
         <div>
-          <strong>STRIDE</strong>
-          <span>Ride practice by STRIVE</span>
+          <strong>STRIVE Ride Share</strong>
+          <span>Practice simulator</span>
         </div>
+        <button id="settingsButton" class="settings-button" type="button" aria-label="Open settings">⚙</button>
       </section>
 
       <p class="intro">
         Choose the version that fits the client today. Both are practice-only simulators and both keep guided support available.
       </p>
 
-      <nav class="choices" aria-label="STRIDE simulation choices">
+      <nav class="choices" aria-label="STRIVE Ride Share simulation choices">
         <a class="choice" href="./basic.html">
           <span>
-            <h2>Basic Simulation</h2>
+            <h2>Simple Simulation</h2>
             <p>Simple visual layout for learning the ride-share sequence with fewer distractions.</p>
           </span>
           <span class="arrow" aria-hidden="true">›</span>
@@ -231,16 +346,134 @@ async function checkStriveAccess() {
 
         <a class="choice" href="../Modern%20Ride%20Share/index.html">
           <span>
-            <h2>Realistic Simulation</h2>
-            <p>Modern app-style practice with map, search, payment review, driver details, and realistic decisions.</p>
+            <h2>Modern Simulation</h2>
+            <p>Modern app-style practice with map, search, payment review, driver details, and app-like decisions.</p>
           </span>
           <span class="arrow" aria-hidden="true">›</span>
         </a>
       </nav>
 
       <p class="footer">
-        STRIDE is the ride-share practice app from STRIVE Physical Therapy. No real ride, payment, call, or message is sent.
+        STRIVE Ride Share is a practice app from STRIVE Physical Therapy. No real ride, payment, call, or message is sent.
       </p>
     </main>
+
+    <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal">
+        <h2 id="settingsTitle">Settings</h2>
+        <div class="settings-grid">
+          <label class="field">
+            Patient first name
+            <input id="patientNameInput" autocomplete="off" />
+          </label>
+          <label class="field">
+            Custom pickup
+            <input id="pickupSetupInput" autocomplete="off" placeholder="STRIVE Physical Therapy" />
+          </label>
+          <label class="field">
+            Custom destinations, one per line
+            <textarea id="destinationsSetupInput" rows="5" placeholder="1180 Desert Bloom Court&#10;Green Valley Pharmacy&#10;Horizon Medical Clinic"></textarea>
+          </label>
+          <label class="field">
+            Scenario
+            <select id="scenarioSelect">
+              <option value="default">Standard ride</option>
+              <option value="doctor">Doctor's appointment</option>
+              <option value="grocery">Grocery run</option>
+              <option value="driver-cancel">Driver cancels</option>
+              <option value="surge">Surge pricing</option>
+            </select>
+          </label>
+          <label class="field">
+            Speech speed
+            <select id="speechRateSelect">
+              <option value="0.78">Slow</option>
+              <option value="0.92">Normal</option>
+            </select>
+          </label>
+          <label class="check-setting">
+            <input id="cardDeclinedInput" type="checkbox" />
+            <span>Practice card will be declined</span>
+          </label>
+          <div class="actions">
+            <button id="saveSettingsButton" class="primary-action" type="button">Save</button>
+            <button id="closeSettingsButton" class="secondary-action" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const storageKey = "ridePracticeSettings";
+      const defaultSettings = {
+        mode: "guided",
+        font: "normal",
+        theme: "light",
+        patientName: "",
+        pickup: "",
+        destinations: [],
+        scenario: "default",
+        speechRate: "0.78",
+        cardDeclined: false,
+        requiredCardNumber: ""
+      };
+
+      function loadSettings() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+          return {
+            ...defaultSettings,
+            ...saved,
+            destinations: Array.isArray(saved.destinations) ? saved.destinations.slice(0, 5) : []
+          };
+        } catch (error) {
+          return { ...defaultSettings };
+        }
+      }
+
+      function saveSettings(settings) {
+        localStorage.setItem(storageKey, JSON.stringify(settings));
+      }
+
+      const settingsModal = document.querySelector("#settingsModal");
+      const settingsButton = document.querySelector("#settingsButton");
+      const closeSettingsButton = document.querySelector("#closeSettingsButton");
+      const saveSettingsButton = document.querySelector("#saveSettingsButton");
+
+      function openSettings() {
+        const settings = loadSettings();
+        document.querySelector("#patientNameInput").value = settings.patientName || "";
+        document.querySelector("#pickupSetupInput").value = settings.pickup || "";
+        document.querySelector("#destinationsSetupInput").value = (settings.destinations || []).join("\n");
+        document.querySelector("#scenarioSelect").value = settings.scenario || "default";
+        document.querySelector("#speechRateSelect").value = settings.speechRate || "0.78";
+        document.querySelector("#cardDeclinedInput").checked = Boolean(settings.cardDeclined);
+        settingsModal.classList.add("open");
+      }
+
+      settingsButton.addEventListener("click", openSettings);
+      closeSettingsButton.addEventListener("click", () => settingsModal.classList.remove("open"));
+      settingsModal.addEventListener("click", (event) => {
+        if (event.target === settingsModal) settingsModal.classList.remove("open");
+      });
+
+      saveSettingsButton.addEventListener("click", () => {
+        const current = loadSettings();
+        current.patientName = document.querySelector("#patientNameInput").value.trim();
+        current.pickup = document.querySelector("#pickupSetupInput").value.trim();
+        current.destinations = document.querySelector("#destinationsSetupInput").value
+          .split("\n")
+          .map((item) => item.trim())
+          .filter(Boolean)
+          .slice(0, 5);
+        current.scenario = document.querySelector("#scenarioSelect").value;
+        current.speechRate = document.querySelector("#speechRateSelect").value;
+        current.cardDeclined = document.querySelector("#cardDeclinedInput").checked;
+        current.theme = "light";
+        current.requiredCardNumber = "";
+        saveSettings(current);
+        settingsModal.classList.remove("open");
+      });
+    </script>
   </body>
 </html>
