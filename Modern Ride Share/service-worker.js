@@ -1,8 +1,7 @@
-const CACHE_NAME = "stride-basic-ride-share-v1";
+const CACHE_NAME = "stride-realistic-ride-share-v1";
 const APP_ASSETS = [
   "./",
   "./index.html",
-  "./basic.html",
   "./manifest.json",
   "./icon.svg",
   "./app-icon-192.png",

@@ -1,7 +1,7 @@
 {
-  "name": "STRIDE Ride Share Practice",
-  "short_name": "STRIDE",
-  "description": "Ride-share booking simulators by STRIVE with basic and realistic practice options.",
+  "name": "STRIDE Realistic Ride Share",
+  "short_name": "STRIDE Realistic",
+  "description": "Realistic mobile ride-share booking simulator by STRIVE for senior and patient training.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
