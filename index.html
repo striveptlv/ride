@@ -156,7 +156,7 @@
       }
     </style>
 
-<script type="module" data-strive-access-guard>
+<script type="text/plain" data-strive-access-guard data-temporarily-disabled="true">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
@@ -198,10 +198,12 @@ async function checkStriveAccess() {
   }
 }
 
-checkStriveAccess().catch((error) => {
-  console.error("Access check failed:", error);
-  window.location.replace(AUTH_URL);
-});
+// Temporarily disabled while the STRIDE chooser is being tested.
+// To reactivate, change this script type back to "module" and restore the call below.
+// checkStriveAccess().catch((error) => {
+//   console.error("Access check failed:", error);
+//   window.location.replace(AUTH_URL);
+// });
 </script>
   </head>
   <body>
