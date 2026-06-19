@@ -2662,53 +2662,6 @@
       }
     </style>
   
-<script type="module" data-strive-access-guard>
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const SUPABASE_URL = "https://ccfpdgmmwkghjszkbnzs.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_7Je2n19DYuDUUR-l9DQPCQ_ui1S17Ui";
-const AUTH_URL = "https://www.striveptlv.com/independence/auth.html";
-const TRIAL_ENDED_URL = "https://www.striveptlv.com/independence/trial-ended.html";
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-async function checkStriveAccess() {
-  const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-  if (userError || !user) {
-    window.location.replace(AUTH_URL);
-    return;
-  }
-
-  const { data: profile, error: profileError } = await supabase
-    .from("profile")
-    .select("has_access, access_type, trial_ends_at")
-    .eq("user_id", user.id)
-    .single();
-
-  if (profileError || !profile) {
-    console.error("Profile fetch failed:", profileError?.message);
-    window.location.replace(AUTH_URL);
-    return;
-  }
-
-  const now = new Date();
-  const trialEndsAt = profile.trial_ends_at ? new Date(profile.trial_ends_at) : null;
-  const trialActive = profile.access_type === "trial" && trialEndsAt && trialEndsAt > now;
-  const paidActive = profile.access_type === "paid" && profile.has_access === true;
-  const teamActive = profile.access_type === "team" && profile.has_access === true;
-  const adminActive = profile.access_type === "admin" && profile.has_access === true;
-
-  if (!(trialActive || paidActive || teamActive || adminActive)) {
-    window.location.replace(TRIAL_ENDED_URL);
-  }
-}
-
-checkStriveAccess().catch((error) => {
-  console.error("Access check failed:", error);
-  window.location.replace(AUTH_URL);
-});
-</script>
 </head>
   <body>
     <main class="app">
